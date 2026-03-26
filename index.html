@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1492W Research Dashboards</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0F2640;min-height:100vh;display:flex;align-items:center;justify-content:center}
+
+/* Login Screen */
+.login-container{background:#fff;border-radius:16px;padding:48px;max-width:420px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.3);text-align:center}
+.login-container .logo{font-size:32px;font-weight:800;color:#1B3A5C;margin-bottom:4px}
+.login-container .tagline{font-size:14px;color:#5A6B7E;margin-bottom:32px}
+.login-container input{width:100%;padding:14px 16px;border:2px solid #D8E2EC;border-radius:10px;font-size:15px;outline:none;transition:border .2s}
+.login-container input:focus{border-color:#1B3A5C}
+.login-container button{width:100%;padding:14px;background:#1B3A5C;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;margin-top:12px;transition:background .2s}
+.login-container button:hover{background:#2E5984}
+.error{color:#C62828;font-size:13px;margin-top:8px;display:none}
+
+/* Dashboard Index */
+.dashboard-container{display:none;max-width:900px;width:95%;margin:40px auto}
+.dash-header{text-align:center;margin-bottom:40px}
+.dash-header h1{font-size:28px;font-weight:800;color:#fff}
+.dash-header p{color:rgba(255,255,255,0.6);font-size:14px;margin-top:6px}
+.dash-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px}
+.dash-card{background:#fff;border-radius:14px;padding:28px;text-decoration:none;color:#1A1A1A;box-shadow:0 4px 20px rgba(0,0,0,0.1);transition:transform .2s,box-shadow .2s;position:relative;overflow:hidden}
+.dash-card:hover{transform:translateY(-4px);box-shadow:0 8px 32px rgba(0,0,0,0.15)}
+.dash-card .emoji{font-size:36px;margin-bottom:12px}
+.dash-card h3{font-size:16px;font-weight:700;color:#1B3A5C;margin-bottom:4px}
+.dash-card .desc{font-size:13px;color:#5A6B7E;line-height:1.5}
+.dash-card .badge{position:absolute;top:16px;right:16px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;padding:3px 8px;border-radius:4px}
+.badge.earnings{background:#E8F5E9;color:#2E7D32}
+.badge.analysis{background:#E3F2FD;color:#1565C0}
+.badge.evolution{background:#FFF3E0;color:#E65100}
+.logout-btn{display:block;text-align:center;color:rgba(255,255,255,0.4);font-size:12px;margin-top:32px;cursor:pointer;text-decoration:none}
+.logout-btn:hover{color:rgba(255,255,255,0.7)}
+</style>
+</head>
+<body>
+
+<!-- Login -->
+<div class="login-container" id="loginBox">
+  <div class="logo">1492W</div>
+  <div class="tagline">Research Dashboard Portal</div>
+  <form id="loginForm">
+    <input type="password" id="pwd" placeholder="Enter password" autocomplete="off" autofocus>
+    <button type="submit">Access Dashboards</button>
+    <div class="error" id="errorMsg">Incorrect password. Please try again.</div>
+  </form>
+</div>
+
+<!-- Dashboard Index (hidden until authenticated) -->
+<div class="dashboard-container" id="dashIndex">
+  <div class="dash-header">
+    <h1>1492W Research Dashboards</h1>
+    <p>Select a company to view its latest analysis</p>
+  </div>
+  <div class="dash-grid">
+    <a class="dash-card" href="xiaomi/index.html">
+      <div class="emoji">📱</div>
+      <span class="badge earnings">Earnings</span>
+      <h3>Xiaomi (1810.HK)</h3>
+      <div class="desc">Q4 FY2025 Earnings Dashboard — Revenue, EV, IoT, AI strategy analysis with interactive charts</div>
+    </a>
+    <a class="dash-card" href="weibo/index.html">
+      <div class="emoji">🌐</div>
+      <span class="badge earnings">Earnings</span>
+      <h3>Weibo (WB)</h3>
+      <div class="desc">Q4 FY2025 Earnings Update — User metrics, monetization, competitive positioning</div>
+    </a>
+    <a class="dash-card" href="soyoung/index.html">
+      <div class="emoji">💉</div>
+      <span class="badge analysis">Analysis</span>
+      <h3>So Young (SY)</h3>
+      <div class="desc">Center Phase Analysis — Business model evolution, market dynamics, thesis assessment</div>
+    </a>
+    <a class="dash-card" href="bafs/index.html">
+      <div class="emoji">✈️</div>
+      <span class="badge evolution">Evolution</span>
+      <h3>BAFS (BAFS.BK)</h3>
+      <div class="desc">Business & Reporting Evolution — Segment structure, accounting changes, moat analysis</div>
+    </a>
+  </div>
+  <a class="logout-btn" id="logoutBtn">Sign out</a>
+</div>
+
+<script>
+// Password hash (SHA-256 of the actual password)
+const HASH = '38c30f8971b957aba303815153300d2601bb60f4e0146d39dba69e4648ad9ebd';
+
+async function sha256(str) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+
+// Check if already authenticated
+(async function() {
+  if (sessionStorage.getItem('1492w_auth') === HASH) {
+    showDashboards();
+  }
+})();
+
+document.getElementById('loginForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const pwd = document.getElementById('pwd').value;
+  const hash = await sha256(pwd);
+  if (hash === HASH) {
+    sessionStorage.setItem('1492w_auth', HASH);
+    showDashboards();
+  } else {
+    document.getElementById('errorMsg').style.display = 'block';
+    document.getElementById('pwd').value = '';
+    document.getElementById('pwd').focus();
+  }
+});
+
+document.getElementById('logoutBtn').addEventListener('click', function() {
+  sessionStorage.removeItem('1492w_auth');
+  location.reload();
+});
+
+function showDashboards() {
+  document.getElementById('loginBox').style.display = 'none';
+  document.getElementById('dashIndex').style.display = 'block';
+}
+</script>
+</body>
+</html>

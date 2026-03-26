@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+<script src="../auth.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weibo Q4 FY2025 Earnings Update</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #f8f9fa;
+            color: #202124;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .company-name {
+            font-size: 36px;
+            font-weight: 700;
+            color: #202124;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: #5f6368;
+            margin-bottom: 12px;
+        }
+
+        .badge-sector {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .badge-monitoring {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+
+        .badge-high {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+
+        .badge-new {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #e0e0e0;
+            margin-bottom: 40px;
+            gap: 0;
+            background: white;
+        }
+
+        .tab-button {
+            padding: 16px 24px;
+            border: none;
+            background: white;
+            color: #5f6368;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .tab-button:hover {
+            color: #202124;
+            background-color: #f8f9fa;
+        }
+
+        .tab-button.active {
+            color: #1a73e8;
+            border-bottom-color: #4285f4;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .section-header {
+            font-size: 24px;
+            font-weight: 700;
+            color: #202124;
+            margin-bottom: 12px;
+        }
+
+        .section-description {
+            color: #5f6368;
+            margin-bottom: 32px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .card {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 24px;
+        }
+
+        .card h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #202124;
+            margin-bottom: 16px;
+        }
+
+        .card ul {
+            list-style: none;
+        }
+
+        .card li {
+            margin-bottom: 12px;
+            color: #5f6368;
+            font-size: 14px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .card li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #1a73e8;
+        }
+
+        .card-risk {
+            border-left: 4px solid #dc2626;
+        }
+
+        .card-risk.amber {
+            border-left-color: #f59e0b;
+        }
+
+        .card-action {
+            border-left: 4px solid #4285f4;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 350px;
+            margin-bottom: 32px;
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 24px;
+        }
+
+        .chart-container canvas {
+            max-height: 300px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th {
+            background-color: #f8f9fa;
+            padding: 16px;
+            text-align: left;
+            font-weight: 600;
+            color: #202124;
+            font-size: 13px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        td {
+            padding: 14px 16px;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 14px;
+            color: #5f6368;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .trend-up {
+            color: #0d7377;
+            font-weight: 500;
+        }
+
+        .trend-down {
+            color: #dc2626;
+            font-weight: 500;
+        }
+
+        .radar-container {
+            position: relative;
+            height: 320px;
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 24px;
+        }
+
+        .checklist-item {
+            margin-bottom: 16px;
+            padding-left: 20px;
+            position: relative;
+            font-size: 14px;
+            color: #5f6368;
+        }
+
+        .checklist-item:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #1a73e8;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .grid-3,
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+
+            .tabs {
+                flex-wrap: wrap;
+            }
+
+            .tab-button {
+                padding: 12px 16px;
+                font-size: 13px;
+            }
+
+            .company-name {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <span class="badge-sector">Technology / Social Media</span>
+            <h1 class="company-name">Weibo Corporation</h1>
+            <p class="subtitle">Q4 FY2025 Earnings Update</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-button active" onclick="switchTab(event, 'snapshot')">A) Executive Snapshot</button>
+            <button class="tab-button" onclick="switchTab(event, 'revenue')">B) Revenue Analysis</button>
+            <button class="tab-button" onclick="switchTab(event, 'margins')">C) Margins & Costs</button>
+            <button class="tab-button" onclick="switchTab(event, 'kpi')">D) KPI Dashboard</button>
+            <button class="tab-button" onclick="switchTab(event, 'moat')">E) Strategic Moat</button>
+            <button class="tab-button" onclick="switchTab(event, 'risks')">F) Risks & Monitoring</button>
+        </div>
+
+        <!-- TAB A: EXECUTIVE SNAPSHOT -->
+        <div id="snapshot" class="tab-content active">
+            <h2 class="section-header">A) Executive Snapshot</h2>
+            <p class="section-description">Thesis Status: MONITORING. Q4 FY2025 shows revenue returning to growth (+4% YoY) but management deliberately trading margin for strategic investment. The feed pivot and AI integration are transforming the platform but execution risk remains elevated.</p>
+
+            <div class="grid-3">
+                <div class="card">
+                    <h3>KEY CHANGES</h3>
+                    <ul>
+                        <li>Revenue +4% YoY to $473.3M (best since Q4 FY2023)</li>
+                        <li>Non-GAAP op margin compressed to 21% (from 30%)</li>
+                        <li>AI ad creatives reached 40% of RTB feed</li>
+                        <li>Dividend cut to $0.61/share from $0.82</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3>WHAT TO MONITOR</h3>
+                    <ul>
+                        <li>Q1 FY2026 ad revenue growth (guided single-digit)</li>
+                        <li>Non-GAAP margin recovery from 21%</li>
+                        <li>Feed pivot user engagement metrics</li>
+                        <li>Intelligent Search monetization timeline</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3>RISK WATCH</h3>
+                    <span class="badge badge-monitoring">MONITORING</span>
+                    <ul>
+                        <li>Feed pivot: user metrics volatile during transition</li>
+                        <li>Margin compression: structural vs temporary unclear</li>
+                        <li>MAU declining: 567M, down 23M YoY</li>
+                        <li>Alibaba concentration: +112% Q3</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <canvas id="snapshotChart"></canvas>
+            </div>
+        </div>
+
+        <!-- TAB B: REVENUE ANALYSIS -->
+        <div id="revenue" class="tab-content">
+            <h2 class="section-header">B) Revenue Logic & Growth Decomposition</h2>
+            <p class="section-description">Ad & Marketing revenues dominate (86% of total) via CPM/CPC in feed, display, and search channels. VAS (14%) includes memberships and game services. Growth drivers: AI-driven targeting improvements, feed pivot engagement uplift, and emerging verticals in local services.</p>
+
+            <div class="grid-2">
+                <div class="card">
+                    <h3>Revenue Structure</h3>
+                    <p style="font-size: 14px; color: #5f6368; margin-bottom: 16px;"><strong>Ad & Marketing:</strong> ~86% of revenue ($1.50B FY2025). Monetized via CPM/CPC in feed ads, social display, topic/search ads. Content marketing ~50% of ad revenue.</p>
+                    <p style="font-size: 14px; color: #5f6368; margin-bottom: 16px;"><strong>VAS:</strong> ~14% ($256M FY2025). Memberships, game-related services.</p>
+                    <p style="font-size: 14px; color: #5f6368; margin-bottom: 12px;"><strong>Growth Decomposition:</strong></p>
+                    <ul>
+                        <li>Volume: MAU declining but feed pivot aims to boost engagement per user</li>
+                        <li>Price: AI improving CPM through better targeting; 40% of creatives AI-generated</li>
+                        <li>Mix: Content marketing stable at 50%; performance-based RTB ads growing fast</li>
+                        <li>New: Local services and e-commerce emerging as growth verticals</li>
+                    </ul>
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="revenueChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB C: MARGINS & COSTS -->
+        <div id="margins" class="tab-content">
+            <h2 class="section-header">C) Margin Drivers & Cost Evolution</h2>
+            <p class="section-description">Gross margin stable near 79%. Operating margin compressed to 21% (Non-GAAP) in Q4 FY2025 from strategic reinvestment in AI and feed pivot. S&M largest swing factor; R&D cut 26% over 2 years. Cash conversion strong: ~$478M FCF in FY2025 despite margin compression.</p>
+
+            <div class="grid-3">
+                <div class="card">
+                    <h3>Gross Margin (~79%)</h3>
+                    <ul>
+                        <li>Cost of revenues declining ($401M→$370M)</li>
+                        <li>Bandwidth/server costs optimized</li>
+                        <li>Near-zero marginal cost for ad inventory</li>
+                        <li>Sustainable at 78-80% range</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3>Operating Margin</h3>
+                    <ul>
+                        <li>GAAP: 28% FY2024 peak</li>
+                        <li>Non-GAAP: 30% historical</li>
+                        <li>S&M largest swing factor</li>
+                        <li>R&D cut 26% over 2 years</li>
+                        <li>SBC declined 38% ($112M→$70M)</li>
+                        <li>Q4 dropped to 21% from strategic investment</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3>Cash Conversion</h3>
+                    <ul>
+                        <li>FCF ~$478M FY2025</li>
+                        <li>Capex only $42M (asset-light)</li>
+                        <li>Strong working capital (prepaid advertisers)</li>
+                        <li>Cash position $2.41B ($10/share)</li>
+                        <li>High conversion despite margin squeeze</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <canvas id="waterfallChart"></canvas>
+            </div>
+        </div>
+
+        <!-- TAB D: KPI DASHBOARD -->
+        <div id="kpi" class="tab-content">
+            <h2 class="section-header">D) KPI Dashboard — Q4 FY2025</h2>
+            <p class="section-description">Key metrics show revenue recovery momentum offset by user decline and margin compression. Alibaba concentration risk elevated. AI ad creative penetration and Intelligent Search growing fast, signaling strategic pivot momentum.</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Metric</th>
+                        <th>Q4 FY2025</th>
+                        <th>Q3 FY2025</th>
+                        <th>Q4 FY2024</th>
+                        <th>YoY Change</th>
+                        <th>Trend</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Total Revenue</strong></td>
+                        <td>$473.3M</td>
+                        <td>$442.3M</td>
+                        <td>$456.8M</td>
+                        <td><span class="trend-up">+4%</span></td>
+                        <td>Recovering</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Ad Revenue</strong></td>
+                        <td>$403.8M</td>
+                        <td>$375.4M</td>
+                        <td>$385.9M</td>
+                        <td><span class="trend-up">+5%</span></td>
+                        <td>Recovering</td>
+                    </tr>
+                    <tr>
+                        <td><strong>VAS Revenue</strong></td>
+                        <td>$69.5M</td>
+                        <td>$66.9M</td>
+                        <td>$71.0M</td>
+                        <td><span class="trend-down">-2%</span></td>
+                        <td>Flat</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Alibaba Revenue</strong></td>
+                        <td>~$50M</td>
+                        <td>$45.5M</td>
+                        <td>~$40M</td>
+                        <td><span class="trend-up">+24%</span></td>
+                        <td>Surging</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Non-GAAP Op Margin</strong></td>
+                        <td>21%</td>
+                        <td>30%</td>
+                        <td>30%</td>
+                        <td><span class="trend-down">-900 bps</span></td>
+                        <td>Compressed</td>
+                    </tr>
+                    <tr>
+                        <td><strong>MAU (Dec)</strong></td>
+                        <td>567M</td>
+                        <td>578M</td>
+                        <td>590M</td>
+                        <td><span class="trend-down">-3.9%</span></td>
+                        <td>Declining</td>
+                    </tr>
+                    <tr>
+                        <td><strong>DAU (Dec avg)</strong></td>
+                        <td>252M</td>
+                        <td>257M</td>
+                        <td>260M</td>
+                        <td><span class="trend-down">-3.1%</span></td>
+                        <td>Declining</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Intelligent Search MAU</strong></td>
+                        <td>80M</td>
+                        <td>70M+</td>
+                        <td>N/A</td>
+                        <td><span class="badge badge-new">NEW</span></td>
+                        <td>Growing fast</td>
+                    </tr>
+                    <tr>
+                        <td><strong>AI Ad Creative %</strong></td>
+                        <td>40%</td>
+                        <td>30%</td>
+                        <td>N/A</td>
+                        <td><span class="badge badge-new">NEW</span></td>
+                        <td>Growing fast</td>
+                    </tr>
+                    <tr>
+                        <td><strong>FCF (Full Year)</strong></td>
+                        <td colspan="2">~$478M</td>
+                        <td>~$578M</td>
+                        <td><span class="trend-down">-17%</span></td>
+                        <td>Declining</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Dividend/Share</strong></td>
+                        <td>$0.61</td>
+                        <td colspan="2">$0.82</td>
+                        <td><span class="trend-down">-26%</span></td>
+                        <td>Cut</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Cash Position</strong></td>
+                        <td>$2.41B</td>
+                        <td>$2.04B</td>
+                        <td>$2.35B</td>
+                        <td><span class="trend-up">+3%</span></td>
+                        <td>Stable</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- TAB E: STRATEGIC MOAT -->
+        <div id="moat" class="tab-content">
+            <h2 class="section-header">E) Strategic / Moat Assessment</h2>
+            <p class="section-description">Moat durability is eroding as competitive positioning weakens. Feed pivot strategy concedes the algorithm war to short-video platforms while betting on brand marketing and trending topics. Pricing power moderate. Capital intensity low but AI advantage unclear.</p>
+
+            <div class="grid-2">
+                <div class="card">
+                    <table style="border: none;">
+                        <thead>
+                            <tr>
+                                <th style="border: none; padding: 0 0 12px 0;">Dimension</th>
+                                <th style="border: none; padding: 0 0 12px 0;">Condition</th>
+                                <th style="border: none; padding: 0 0 12px 0;">Direction</th>
+                                <th style="border: none; padding: 0 0 12px 0;">Assessment</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="border: none; padding: 8px 0;">Pricing Power</td>
+                                <td style="border: none; padding: 8px 0;">Moderate</td>
+                                <td style="border: none; padding: 8px 0;">→</td>
+                                <td style="border: none; padding: 8px 0; font-size: 12px;">Content marketing higher-value but performance ads commoditizing</td>
+                            </tr>
+                            <tr>
+                                <td style="border: none; padding: 8px 0;">Competitive Pos</td>
+                                <td style="border: none; padding: 8px 0;">Challenged</td>
+                                <td style="border: none; padding: 8px 0;">↓</td>
+                                <td style="border: none; padding: 8px 0; font-size: 12px;">Feed pivot concedes algorithm war; competing on short-video turf</td>
+                            </tr>
+                            <tr>
+                                <td style="border: none; padding: 8px 0;">Switching Costs</td>
+                                <td style="border: none; padding: 8px 0;">Low-Mod</td>
+                                <td style="border: none; padding: 8px 0;">→</td>
+                                <td style="border: none; padding: 8px 0; font-size: 12px;">KOL/hot trends sticky but users cross-post easily</td>
+                            </tr>
+                            <tr>
+                                <td style="border: none; padding: 8px 0;">Op Leverage</td>
+                                <td style="border: none; padding: 8px 0;">Positive</td>
+                                <td style="border: none; padding: 8px 0;">↑</td>
+                                <td style="border: none; padding: 8px 0; font-size: 12px;">Real efficiency gains now being reinvested; watch margin floor</td>
+                            </tr>
+                            <tr>
+                                <td style="border: none; padding: 8px 0;">Capital Intensity</td>
+                                <td style="border: none; padding: 8px 0;">Low</td>
+                                <td style="border: none; padding: 8px 0;">→</td>
+                                <td style="border: none; padding: 8px 0; font-size: 12px;">$42M capex; AI via 3rd-party models not proprietary</td>
+                            </tr>
+                            <tr>
+                                <td style="border: none; padding: 8px 0;">Moat Durability</td>
+                                <td style="border: none; padding: 8px 0;">Eroding</td>
+                                <td style="border: none; padding: 8px 0;">↓</td>
+                                <td style="border: none; padding: 8px 0; font-size: 12px;">Hot trends unique but feed moat conceded; AI unproven</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="radar-container">
+                    <canvas id="moatChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB F: RISKS & MONITORING -->
+        <div id="risks" class="tab-content">
+            <h2 class="section-header">F) Risks & Monitoring Checklist</h2>
+            <p class="section-description">Execution risk on feed pivot remains elevated. Margin compression durability uncertain. User decline structural? Alibaba concentration creates revenue volatility. Intelligent Search monetization timeline critical to thesis.</p>
+
+            <div class="grid-2">
+                <div>
+                    <h3 style="margin-bottom: 16px;">Structural Risks</h3>
+                    <div class="card card-risk" style="margin-bottom: 16px;">
+                        <h4 style="font-size: 14px; font-weight: 600; color: #dc2626; margin-bottom: 8px;">Feed Pivot Execution (RED)</h4>
+                        <p style="font-size: 13px; color: #5f6368;">Rolled out Jul 2025; user metrics volatile. CEO acknowledged challenges. MAU decline ongoing.</p>
+                    </div>
+
+                    <div class="card card-risk" style="margin-bottom: 16px;">
+                        <h4 style="font-size: 14px; font-weight: 600; color: #dc2626; margin-bottom: 8px;">Margin Compression (RED)</h4>
+                        <p style="font-size: 13px; color: #5f6368;">21% from 30%. If brand marketing ROI doesn't materialize H2 2026, may be structural. Watch floor carefully.</p>
+                    </div>
+
+                    <div class="card card-risk amber" style="margin-bottom: 16px;">
+                        <h4 style="font-size: 14px; font-weight: 600; color: #92400e; margin-bottom: 8px;">MAU Decline (AMBER)</h4>
+                        <p style="font-size: 13px; color: #5f6368;">567M, down 23M YoY. Interest-based feed should help but unproven. Engagement per user critical.</p>
+                    </div>
+
+                    <div class="card card-risk amber">
+                        <h4 style="font-size: 14px; font-weight: 600; color: #92400e; margin-bottom: 8px;">Alibaba Concentration (AMBER)</h4>
+                        <p style="font-size: 13px; color: #5f6368;">+112% Q3; outsized growth from single client. Reversion risk if macroeconomic slowdown impacts e-commerce spend.</p>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 style="margin-bottom: 16px;">Monitoring Checklist</h3>
+                    <div class="card card-action" style="margin-bottom: 16px;">
+                        <h4 style="font-size: 14px; font-weight: 600; color: #4285f4; margin-bottom: 12px;">5 Key Signals to Track</h4>
+                        <div class="checklist-item">Q1 FY2026 ad revenue growth rate (guided single-digit)</div>
+                        <div class="checklist-item">Non-GAAP margin recovery from 21% toward 28%+</div>
+                        <div class="checklist-item">MAU stabilization / stabilization at 560M+ level</div>
+                        <div class="checklist-item">Intelligent Search monetization strategy & timeline</div>
+                        <div class="checklist-item">AI ad CPM impact (pricing power vs margin trade-off)</div>
+                    </div>
+
+                    <div class="card card-action">
+                        <h4 style="font-size: 14px; font-weight: 600; color: #4285f4; margin-bottom: 12px;">Conviction Tripwires</h4>
+                        <div class="checklist-item">Non-GAAP margin sustains &lt;25% for 2+ consecutive quarters</div>
+                        <div class="checklist-item">MAU drops below 550M without engagement recovery</div>
+                        <div class="checklist-item">Intelligent Search MAU plateaus below 100M by H2 2026</div>
+                        <div class="checklist-item">Alibaba revenue contracts &gt;20% in any quarter</div>
+                        <div class="checklist-item">Dividend cut further without FCF growth visibility</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let charts = {};
+
+        function switchTab(event, tabName) {
+            // Hide all tabs
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.tab-button');
+            buttons.forEach(btn => btn.classList.remove('active'));
+
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+
+            // Redraw charts after small delay to ensure tab is visible
+            setTimeout(() => {
+                if (tabName === 'snapshot' && charts.snapshot) {
+                    charts.snapshot.resize();
+                }
+                if (tabName === 'revenue' && charts.revenue) {
+                    charts.revenue.resize();
+                }
+                if (tabName === 'margins' && charts.waterfall) {
+                    charts.waterfall.resize();
+                }
+                if (tabName === 'moat' && charts.moat) {
+                    charts.moat.resize();
+                }
+            }, 100);
+        }
+
+        function initCharts() {
+            // Executive Snapshot Chart
+            const snapshotCtx = document.getElementById('snapshotChart').getContext('2d');
+            charts.snapshot = new Chart(snapshotCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Q1\'24', 'Q2\'24', 'Q3\'24', 'Q4\'24', 'Q1\'25', 'Q2\'25', 'Q3\'25', 'Q4\'25'],
+                    datasets: [
+                        {
+                            label: 'Revenue ($M)',
+                            data: [430, 440, 465, 457, 397, 445, 442, 473],
+                            borderColor: '#1a73e8',
+                            backgroundColor: 'rgba(26, 115, 232, 0.05)',
+                            yAxisID: 'y',
+                            tension: 0.4,
+                            pointBackgroundColor: '#1a73e8',
+                            pointBorderColor: '#fff',
+                            pointBorderWidth: 2,
+                            pointRadius: 5,
+                            borderWidth: 2
+                        },
+                        {
+                            label: 'Non-GAAP Op Margin (%)',
+                            data: [33, 35, 35, 30, 28, 30, 30, 21],
+                            borderColor: '#f59e0b',
+                            backgroundColor: 'rgba(245, 158, 11, 0.05)',
+                            yAxisID: 'y1',
+                            tension: 0.4,
+                            pointBackgroundColor: '#f59e0b',
+                            pointBorderColor: '#fff',
+                            pointBorderWidth: 2,
+                            pointRadius: 5,
+                            borderWidth: 2
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                            labels: { font: { size: 13 }, color: '#5f6368', usePointStyle: true }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            title: { display: true, text: 'Revenue ($M)', color: '#5f6368' },
+                            ticks: { color: '#5f6368' },
+                            grid: { color: '#e0e0e0' }
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            title: { display: true, text: 'Margin (%)', color: '#5f6368' },
+                            ticks: { color: '#5f6368' },
+                            grid: { drawOnChartArea: false }
+                        },
+                        x: {
+                            ticks: { color: '#5f6368' },
+                            grid: { color: '#e0e0e0' }
+                        }
+                    }
+                }
+            });
+
+            // Revenue Mix Chart
+            const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+            charts.revenue = new Chart(revenueCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['FY2022', 'FY2023', 'FY2024', 'FY2025'],
+                    datasets: [
+                        {
+                            label: 'Ad Revenue ($M)',
+                            data: [1597, 1534, 1499, 1504],
+                            backgroundColor: '#1a73e8'
+                        },
+                        {
+                            label: 'VAS Revenue ($M)',
+                            data: [240, 226, 256, 256],
+                            backgroundColor: '#34a853'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                            labels: { font: { size: 13 }, color: '#5f6368' }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            stacked: true,
+                            ticks: { color: '#5f6368' },
+                            grid: { color: '#e0e0e0' }
+                        },
+                        y: {
+                            stacked: true,
+                            ticks: { color: '#5f6368' },
+                            grid: { color: '#e0e0e0' },
+                            title: { display: true, text: 'Revenue ($M)', color: '#5f6368' }
+                        }
+                    }
+                }
+            });
+
+            // Waterfall Chart (approximated with bar)
+            const waterfallCtx = document.getElementById('waterfallChart').getContext('2d');
+            charts.waterfall = new Chart(waterfallCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Revenue', 'COGS', 'Gross Profit', 'S&M', 'R&D', 'G&A', 'Op Income'],
+                    datasets: [{
+                        label: 'FY2025 Margin Walk (Base 100)',
+                        data: [100, -21, 79, -27, -18, -6, 28],
+                        backgroundColor: ['#1a73e8', '#ea4335', '#34a853', '#fbbc04', '#fbbc04', '#fbbc04', '#1a73e8']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'x',
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            ticks: { color: '#5f6368' },
+                            grid: { color: '#e0e0e0' }
+                        },
+                        x: {
+                            ticks: { color: '#5f6368' },
+                            grid: { color: '#e0e0e0' }
+                        }
+                    }
+                }
+            });
+
+            // Moat Radar Chart
+            const moatCtx = document.getElementById('moatChart').getContext('2d');
+            charts.moat = new Chart(moatCtx, {
+                type: 'radar',
+                data: {
+                    labels: ['Pricing Power', 'Competitive Pos', 'Switching Costs', 'Op Leverage', 'Cap Intensity', 'Moat Durability'],
+                    datasets: [{
+                        label: 'Moat Assessment (1-5)',
+                        data: [3, 2, 2.5, 4, 4.5, 2],
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.15)',
+                        pointBackgroundColor: '#667eea',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
+                        pointRadius: 5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: true, position: 'bottom', labels: { color: '#5f6368' } }
+                    },
+                    scales: {
+                        r: {
+                            min: 0,
+                            max: 5,
+                            ticks: { color: '#5f6368', stepSize: 1 },
+                            grid: { color: '#e0e0e0' }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Initialize charts when page loads
+        window.addEventListener('load', initCharts);
+    </script>
+</body>
+</html>

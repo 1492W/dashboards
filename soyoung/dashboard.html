@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="../auth.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>So-Young · Center Phase Analysis</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root { --navy: #1B3A5C; --blue: #2E86C1; --teal: #17A589; --amber: #F39C12; --red: #E74C3C; --light: #F0F4F8; --card: #fff; --border: #E0E6ED; --text: #2C3E50; --muted: #7F8C8D; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--light); color: var(--text); line-height: 1.5; }
+  .header { background: linear-gradient(135deg, var(--navy) 0%, #2C5F8A 100%); color: #fff; padding: 32px 40px; }
+  .header h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.3px; }
+  .header p { font-size: 13px; color: #B0C4DE; margin-top: 4px; }
+  .container { max-width: 1280px; margin: 0 auto; padding: 24px; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+  .card { background: var(--card); border-radius: 10px; border: 1px solid var(--border); padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,.04); }
+  .card h3 { font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
+  .metric-big { font-size: 36px; font-weight: 700; color: var(--navy); }
+  .metric-sub { font-size: 13px; color: var(--muted); margin-top: 2px; }
+  .badge { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 10px; margin-left: 6px; }
+  .badge-green { background: #E8F8F0; color: #1A9C6C; }
+  .badge-red { background: #FDEDEE; color: #C0392B; }
+  .badge-amber { background: #FEF5E7; color: #B7791F; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead th { background: var(--navy); color: #fff; padding: 10px 12px; text-align: right; font-weight: 600; font-size: 12px; letter-spacing: 0.3px; }
+  thead th:first-child { text-align: left; border-radius: 6px 0 0 0; }
+  thead th:last-child { border-radius: 0 6px 0 0; }
+  tbody td { padding: 9px 12px; text-align: right; border-bottom: 1px solid var(--border); }
+  tbody td:first-child { text-align: left; font-weight: 500; }
+  tbody tr:hover { background: #F7FAFC; }
+  tbody tr:nth-child(even) { background: #FAFBFC; }
+  tbody tr:nth-child(even):hover { background: #F0F4F8; }
+  .total-row td { font-weight: 700; background: #EBF0F5 !important; border-top: 2px solid var(--navy); }
+  .chart-wrap { position: relative; height: 280px; }
+  .section-title { font-size: 16px; font-weight: 700; color: var(--navy); margin: 28px 0 14px; padding-bottom: 8px; border-bottom: 2px solid var(--navy); }
+  .phase-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: middle; }
+  .dot-ramp { background: var(--amber); }
+  .dot-growth { background: var(--blue); }
+  .dot-mature { background: var(--teal); }
+  .legend-row { display: flex; gap: 20px; margin-bottom: 14px; font-size: 13px; color: var(--muted); }
+  .legend-row span { display: flex; align-items: center; }
+  .note { font-size: 11px; color: var(--muted); margin-top: 8px; font-style: italic; }
+  .kpi-strip { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 20px; }
+  .kpi-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 14px; text-align: center; }
+  .kpi-card .val { font-size: 24px; font-weight: 700; color: var(--navy); }
+  .kpi-card .label { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .kpi-card .delta { font-size: 12px; font-weight: 600; }
+  .up { color: #1A9C6C; }
+  .down { color: #C0392B; }
+  @media (max-width: 900px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } .kpi-strip { grid-template-columns: repeat(3, 1fr); } }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>So-Young International Inc. (SY) — Aesthetic Center Phase Analysis</h1>
+  <p>Q4 2024 – Q4 2025 · Source-verified from earnings releases · Updated March 2026</p>
+</div>
+
+<div class="container">
+
+<!-- KPI STRIP -->
+<div class="kpi-strip">
+  <div class="kpi-card">
+    <div class="val">49</div>
+    <div class="label">Operating Centers</div>
+    <div class="delta up">+158% YoY</div>
+  </div>
+  <div class="kpi-card">
+    <div class="val">¥249M</div>
+    <div class="label">Center Revenue (Q4)</div>
+    <div class="delta up">+205% YoY</div>
+  </div>
+  <div class="kpi-card">
+    <div class="val">25</div>
+    <div class="label">Profitable Centers</div>
+    <div class="delta up">51% of total</div>
+  </div>
+  <div class="kpi-card">
+    <div class="val">¥8.4M</div>
+    <div class="label">Mature Ctr Avg Rev</div>
+    <div class="delta up">+16% QoQ</div>
+  </div>
+  <div class="kpi-card">
+    <div class="val">39</div>
+    <div class="label">Positive Cash Flow</div>
+    <div class="delta up">80% of total</div>
+  </div>
+</div>
+
+<!-- CHARTS ROW -->
+<div class="grid-2">
+  <div class="card">
+    <h3>Revenue by Phase (Stacked)</h3>
+    <div class="chart-wrap"><canvas id="chartRevenue"></canvas></div>
+  </div>
+  <div class="card">
+    <h3>Center Count by Phase</h3>
+    <div class="chart-wrap"><canvas id="chartCenters"></canvas></div>
+  </div>
+</div>
+
+<div class="grid-2">
+  <div class="card">
+    <h3>Avg Revenue per Center by Phase</h3>
+    <div class="chart-wrap"><canvas id="chartAvgRev"></canvas></div>
+  </div>
+  <div class="card">
+    <h3>Revenue Mix Shift (% of Total)</h3>
+    <div class="chart-wrap"><canvas id="chartMix"></canvas></div>
+  </div>
+</div>
+
+<!-- PHASE TABLE -->
+<div class="section-title">Phase-Level Detail</div>
+<div class="legend-row">
+  <span><span class="phase-dot dot-ramp"></span>Ramp-up (0–3 months)</span>
+  <span><span class="phase-dot dot-growth"></span>Growth (4–12 months)</span>
+  <span><span class="phase-dot dot-mature"></span>Maturity (12+ months)</span>
+</div>
+
+<div class="card" style="padding: 0; overflow-x: auto;">
+<table>
+  <thead>
+    <tr>
+      <th>Phase</th>
+      <th colspan="3" style="text-align:center">Q4 2024</th>
+      <th colspan="3" style="text-align:center">Q1 2025</th>
+      <th colspan="3" style="text-align:center">Q2 2025</th>
+      <th colspan="3" style="text-align:center">Q3 2025</th>
+      <th colspan="3" style="text-align:center; background:#2C5F8A">Q4 2025</th>
+    </tr>
+    <tr style="font-size:11px">
+      <th></th>
+      <th>#</th><th>Rev (M)</th><th>Avg/Ctr</th>
+      <th>#</th><th>Rev (M)</th><th>Avg/Ctr</th>
+      <th>#</th><th>Rev (M)</th><th>Avg/Ctr</th>
+      <th>#</th><th>Rev (M)</th><th>Avg/Ctr</th>
+      <th>#</th><th>Rev (M)</th><th>Avg/Ctr</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><span class="phase-dot dot-ramp"></span>Ramp-up</td>
+      <td>4</td><td>2.9</td><td>0.7</td>
+      <td>4</td><td>1.4</td><td>0.4</td>
+      <td>9</td><td>23.6</td><td>2.6</td>
+      <td>10</td><td>9.5</td><td>1.0</td>
+      <td><b>13</b></td><td><b>16.9</b></td><td><b>1.3</b></td>
+    </tr>
+    <tr>
+      <td><span class="phase-dot dot-growth"></span>Growth</td>
+      <td>14</td><td>64.3</td><td>4.6</td>
+      <td>15</td><td>75.9</td><td>5.1</td>
+      <td>14</td><td>89.6</td><td>6.4</td>
+      <td>15</td><td>72.3</td><td>4.8</td>
+      <td><b>19</b></td><td><b>89.3</b></td><td><b>4.7</b></td>
+    </tr>
+    <tr>
+      <td><span class="phase-dot dot-mature"></span>Maturity</td>
+      <td>1</td><td>14.1</td><td>14.1</td>
+      <td>4</td><td>21.6</td><td>5.4</td>
+      <td>6</td><td>31.2</td><td>5.2</td>
+      <td>14</td><td>101.8</td><td>7.3</td>
+      <td><b>17</b></td><td><b>142.8</b></td><td><b>8.4</b></td>
+    </tr>
+    <tr class="total-row">
+      <td>TOTAL</td>
+      <td>19</td><td>81.3</td><td>4.3</td>
+      <td>23</td><td>98.8</td><td>4.3</td>
+      <td>29</td><td>144.4</td><td>5.0</td>
+      <td>39</td><td>183.6</td><td>4.7</td>
+      <td>49</td><td>249.0</td><td>5.1</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<p class="note">Revenue in RMB millions. Avg/Ctr = quarterly revenue per center. Blue-highlighted = source-verified from earnings releases. Q4 2025 phase-level revenue derived from disclosed per-center averages (total may differ slightly from reported ¥248.1M due to rounding).</p>
+
+<!-- SUMMARY TABLE -->
+<div class="section-title">Aggregate Summary</div>
+<div class="card" style="padding: 0; overflow-x: auto;">
+<table>
+  <thead>
+    <tr><th>Metric</th><th>Q4 2024</th><th>Q1 2025</th><th>Q2 2025</th><th>Q3 2025</th><th>Q4 2025</th><th>QoQ Δ</th><th>YoY Δ</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Total Centers</td><td>19</td><td>23</td><td>29</td><td>39</td><td><b>49</b></td><td class="up">+10</td><td class="up">+30</td></tr>
+    <tr><td>Total Aesthetic Tx Revenue (¥M)</td><td>81.3</td><td>98.8</td><td>144.4</td><td>183.6</td><td><b>248.1</b></td><td class="up">+35%</td><td class="up">+205%</td></tr>
+    <tr><td>Centers w/ Positive Op. Cash Flow</td><td>11</td><td>18</td><td>25</td><td>29</td><td><b>39</b></td><td class="up">+10</td><td class="up">+28</td></tr>
+    <tr><td>Centers Profitable (GAAP)</td><td>11*</td><td>18</td><td>20</td><td>20</td><td><b>25</b></td><td class="up">+5</td><td class="up">+14</td></tr>
+    <tr><td>Mature Center Avg Rev (¥M)</td><td>14.1</td><td>5.4</td><td>5.2</td><td>7.3</td><td><b>8.4</b></td><td class="up">+16%</td><td>—</td></tr>
+  </tbody>
+</table>
+</div>
+<p class="note">* Q4 2024 "profitable" = positive monthly operating cash flow (different definition from later quarters' GAAP profitability). Q4 2024 mature center avg is based on only 1 center (Beijing HQ), making it an outlier.</p>
+
+<!-- KEY INSIGHT CARDS -->
+<div class="section-title">Key Takeaways — Q4 2025</div>
+<div class="grid-3">
+  <div class="card" style="border-left: 4px solid var(--teal);">
+    <h3>Maturity Phase Dominance</h3>
+    <p style="font-size:13px">Mature centers now generate <b>57%</b> of total center revenue (¥142.8M of ¥249M), up from just 17% in Q4 2024. As more centers cross the 12-month mark, revenue quality improves structurally.</p>
+  </div>
+  <div class="card" style="border-left: 4px solid var(--blue);">
+    <h3>Avg Rev/Center Recovering</h3>
+    <p style="font-size:13px">Blended avg revenue per center rose to <b>¥5.1M</b> from ¥4.7M in Q3. Mature centers at ¥8.4M show the target unit economics — the gap between mature and growth-phase (¥4.7M) defines the improvement runway.</p>
+  </div>
+  <div class="card" style="border-left: 4px solid var(--amber);">
+    <h3>Ramp-up Drag Manageable</h3>
+    <p style="font-size:13px">13 ramp-up centers contribute only <b>7%</b> of revenue (¥16.9M) but represent 27% of center count. As these mature over 2–3 quarters, they'll shift from drag to contribution — but 35+ new openings in 2026 will reload this bucket.</p>
+  </div>
+</div>
+
+</div>
+
+<script>
+const labels = ['Q4 2024', 'Q1 2025', 'Q2 2025', 'Q3 2025', 'Q4 2025'];
+const rampRev = [2.9, 1.4, 23.6, 9.5, 16.9];
+const growthRev = [64.3, 75.9, 89.6, 72.3, 89.3];
+const matureRev = [14.1, 21.6, 31.2, 101.8, 142.8];
+const rampCnt = [4, 4, 9, 10, 13];
+const growthCnt = [14, 15, 14, 15, 19];
+const matureCnt = [1, 4, 6, 14, 17];
+const rampAvg = [0.7, 0.4, 2.6, 1.0, 1.3];
+const growthAvg = [4.6, 5.1, 6.4, 4.8, 4.7];
+const matureAvg = [14.1, 5.4, 5.2, 7.3, 8.4];
+
+const colors = { ramp: '#F39C12', growth: '#2E86C1', mature: '#17A589' };
+const defaults = { responsive: true, maintainAspectRatio: false };
+
+// Stacked Revenue
+new Chart(document.getElementById('chartRevenue'), {
+  type: 'bar',
+  data: { labels, datasets: [
+    { label: 'Ramp-up', data: rampRev, backgroundColor: colors.ramp+'CC', borderRadius: 2 },
+    { label: 'Growth', data: growthRev, backgroundColor: colors.growth+'CC', borderRadius: 2 },
+    { label: 'Maturity', data: matureRev, backgroundColor: colors.mature+'CC', borderRadius: 2 },
+  ]},
+  options: { ...defaults, plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } }, tooltip: { callbacks: { label: ctx => `${ctx.dataset.label}: ¥${ctx.raw}M` } } }, scales: { x: { stacked: true, grid: { display: false } }, y: { stacked: true, title: { display: true, text: 'RMB M' }, grid: { color: '#EEE' } } } }
+});
+
+// Stacked Centers
+new Chart(document.getElementById('chartCenters'), {
+  type: 'bar',
+  data: { labels, datasets: [
+    { label: 'Ramp-up', data: rampCnt, backgroundColor: colors.ramp+'CC', borderRadius: 2 },
+    { label: 'Growth', data: growthCnt, backgroundColor: colors.growth+'CC', borderRadius: 2 },
+    { label: 'Maturity', data: matureCnt, backgroundColor: colors.mature+'CC', borderRadius: 2 },
+  ]},
+  options: { ...defaults, plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } } }, scales: { x: { stacked: true, grid: { display: false } }, y: { stacked: true, title: { display: true, text: '# Centers' }, grid: { color: '#EEE' } } } }
+});
+
+// Avg Revenue per Center
+new Chart(document.getElementById('chartAvgRev'), {
+  type: 'line',
+  data: { labels, datasets: [
+    { label: 'Ramp-up', data: rampAvg, borderColor: colors.ramp, backgroundColor: colors.ramp+'22', tension: 0.3, fill: false, pointRadius: 5, borderWidth: 2.5 },
+    { label: 'Growth', data: growthAvg, borderColor: colors.growth, backgroundColor: colors.growth+'22', tension: 0.3, fill: false, pointRadius: 5, borderWidth: 2.5 },
+    { label: 'Maturity', data: matureAvg, borderColor: colors.mature, backgroundColor: colors.mature+'22', tension: 0.3, fill: false, pointRadius: 5, borderWidth: 2.5 },
+  ]},
+  options: { ...defaults, plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } }, tooltip: { callbacks: { label: ctx => `${ctx.dataset.label}: ¥${ctx.raw}M/ctr` } } }, scales: { x: { grid: { display: false } }, y: { title: { display: true, text: 'RMB M per center' }, grid: { color: '#EEE' } } } }
+});
+
+// Revenue Mix %
+const totals = rampRev.map((r, i) => r + growthRev[i] + matureRev[i]);
+new Chart(document.getElementById('chartMix'), {
+  type: 'bar',
+  data: { labels, datasets: [
+    { label: 'Ramp-up', data: rampRev.map((r, i) => (r / totals[i] * 100).toFixed(1)), backgroundColor: colors.ramp+'CC', borderRadius: 2 },
+    { label: 'Growth', data: growthRev.map((r, i) => (r / totals[i] * 100).toFixed(1)), backgroundColor: colors.growth+'CC', borderRadius: 2 },
+    { label: 'Maturity', data: matureRev.map((r, i) => (r / totals[i] * 100).toFixed(1)), backgroundColor: colors.mature+'CC', borderRadius: 2 },
+  ]},
+  options: { ...defaults, plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } }, tooltip: { callbacks: { label: ctx => `${ctx.dataset.label}: ${ctx.raw}%` } } }, scales: { x: { stacked: true, grid: { display: false } }, y: { stacked: true, max: 100, title: { display: true, text: '% of Revenue' }, grid: { color: '#EEE' }, ticks: { callback: v => v + '%' } } } }
+});
+</script>
+
+</body>
+</html>

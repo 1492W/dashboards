@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+<script src="../auth.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BAFS Business & Reporting Evolution</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            color: #1a1a1a;
+            background-color: #f5f5f5;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #001a4d 0%, #003d99 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 16px;
+            opacity: 0.95;
+            margin-bottom: 5px;
+        }
+
+        .date {
+            font-size: 13px;
+            opacity: 0.8;
+            font-style: italic;
+        }
+
+        /* Verdict Banner */
+        .verdict-banner {
+            background-color: #FFB84D;
+            border-left: 6px solid #FF8C00;
+            padding: 25px;
+            margin-bottom: 30px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .verdict-banner h2 {
+            color: #001a4d;
+            font-size: 24px;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .verdict-banner p {
+            color: #1a1a1a;
+            font-size: 15px;
+            margin-bottom: 12px;
+            line-height: 1.7;
+        }
+
+        .verdict-banner ul {
+            margin-left: 20px;
+            color: #1a1a1a;
+            font-size: 15px;
+        }
+
+        .verdict-banner li {
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+
+        .verdict-conclusion {
+            background-color: rgba(255, 255, 255, 0.6);
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 15px;
+            font-style: italic;
+            color: #001a4d;
+            font-weight: 500;
+        }
+
+        /* Two-Column Summary */
+        .summary {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .summary-box {
+            background: white;
+            padding: 25px;
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border-top: 4px solid #001a4d;
+        }
+
+        .summary-box h3 {
+            color: #001a4d;
+            font-size: 18px;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .summary-box h4 {
+            color: #003d99;
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 15px;
+            margin-bottom: 8px;
+        }
+
+        .summary-box p {
+            color: #1a1a1a;
+            font-size: 14px;
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+
+        .baseline-item {
+            background-color: #f9f9f9;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-left: 3px solid #003d99;
+            border-radius: 3px;
+            font-size: 13px;
+        }
+
+        .baseline-item strong {
+            color: #001a4d;
+        }
+
+        /* Table Section */
+        .table-section {
+            background: white;
+            padding: 30px;
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+        }
+
+        .table-section h2 {
+            color: #001a4d;
+            font-size: 22px;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .table-controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .table-controls input,
+        .table-controls select {
+            padding: 10px 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+            background: white;
+            font-family: inherit;
+        }
+
+        .table-controls input {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .table-controls select {
+            min-width: 150px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        table thead {
+            background-color: #001a4d;
+            color: white;
+        }
+
+        table th {
+            padding: 14px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid #001a4d;
+            white-space: nowrap;
+        }
+
+        table td {
+            padding: 12px 14px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        table tbody tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        table tbody tr:nth-child(even) {
+            background-color: #fafafa;
+        }
+
+        /* Assessment Color Coding */
+        .assessment {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 12px;
+            white-space: nowrap;
+        }
+
+        .assessment.positive {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .assessment.negative {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .assessment.neutral {
+            background-color: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .assessment.cosmetic {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .assessment.mixed {
+            background-color: #e2e3e5;
+            color: #383d41;
+        }
+
+        .assessment.baseline {
+            background-color: #d0d0d0;
+            color: #2c3840;
+        }
+
+        .layer-l1 {
+            background-color: #e8f4f8;
+        }
+
+        .layer-l2 {
+            background-color: #f5e8f8;
+        }
+
+        /* Footer */
+        .footer {
+            background: #001a4d;
+            color: white;
+            padding: 30px;
+            border-radius: 6px;
+            margin-top: 40px;
+        }
+
+        .footer h3 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .footer p {
+            font-size: 14px;
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+
+        .footer ul {
+            margin-left: 20px;
+            font-size: 14px;
+        }
+
+        .footer li {
+            margin-bottom: 8px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .summary {
+                grid-template-columns: 1fr;
+            }
+
+            table {
+                font-size: 12px;
+            }
+
+            table th,
+            table td {
+                padding: 10px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .verdict-banner h2 {
+                font-size: 20px;
+            }
+
+            .table-controls {
+                flex-direction: column;
+            }
+
+            .table-controls input,
+            .table-controls select {
+                width: 100%;
+            }
+
+            table {
+                font-size: 11px;
+            }
+
+            table th,
+            table td {
+                padding: 8px;
+            }
+
+            .assessment {
+                font-size: 11px;
+                padding: 3px 8px;
+            }
+        }
+
+        /* No results message */
+        .no-results {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>BAFS Business & Reporting Evolution</h1>
+            <p>Bangkok Aviation Fuel Services Co., Ltd.</p>
+            <p class="date">Analysis Date: March 19, 2026</p>
+        </div>
+
+        <!-- Verdict Banner -->
+        <div class="verdict-banner">
+            <h2>⚠ VERDICT: AMBER (Mixed)</h2>
+            <p><strong>BAFS's revenue recovery from THB 1.7B (2021 COVID low) to THB 3.7B (2025) is predominantly REAL,</strong> driven by aviation traffic recovery and pipeline volume growth. However, approximately 15–20% of margin improvement from trough is attributable to reporting/accounting factors:</p>
+            <ul>
+                <li><strong>Useful life extensions</strong> on depot/hydrant assets introduced 2012 (THB 80–130M annual benefit embedded)</li>
+                <li><strong>Emergence of 'Adjusted EBITDA'</strong> excluding THB 74–90M of annual impairment charges</li>
+                <li><strong>Concession accounting</strong> that defers THB 1.6B of revenue over 20 years, creating smoothed earnings</li>
+            </ul>
+            <div class="verdict-conclusion">
+                The business genuinely improved—but reported margins overstate the pace of recovery vs. pre-COVID profitability (2019 net margin 24.5% vs 2025 net margin 4.2%).
+            </div>
+        </div>
+
+        <!-- Two-Column Summary -->
+        <div class="summary">
+            <!-- Business Model Evolution -->
+            <div class="summary-box">
+                <h3>Business Model Evolution</h3>
+
+                <h4>2008 Baseline</h4>
+                <div class="baseline-item">
+                    <strong>Revenue:</strong> THB 2.1B<br>
+                    <strong>Model:</strong> Pure aviation fuel services at 2 airports<br>
+                    <strong>Net Margin:</strong> ~25%
+                </div>
+
+                <h4>Key Transformations</h4>
+                <div class="baseline-item">
+                    <strong>2012:</strong> Subsidiaries (TARCO, JP-One) add 28% of service revenue<br>
+                    <strong>2015:</strong> Geographic expansion to 5 airports (THB 3.4B revenue)<br>
+                    <strong>2021:</strong> New segments—Pipeline (FPT) startup, Solar power (49.4 MW)<br>
+                    <strong>2024:</strong> 3-segment platform: Aviation 80%, Utilities 12%, Power 8%<br>
+                    <strong>2025:</strong> THB 3.7B revenue, 88% pre-COVID levels
+                </div>
+
+                <h4>Assessment: POSITIVE</h4>
+                <p>Genuine diversification from single-airport fuel services to integrated energy infrastructure platform. Segment mix reduces aviation dependency. Pipeline (FPT) and power (solar) are sustainable new revenue streams.</p>
+
+                <h4>Margin Trajectory</h4>
+                <div class="baseline-item">
+                    <strong>2008:</strong> ~25% net margin<br>
+                    <strong>2019:</strong> 24.5% net margin (peak pre-COVID)<br>
+                    <strong>2021:</strong> Net loss THB 785M (COVID)<br>
+                    <strong>2025:</strong> 4.2% net margin (heavily burdened by THB 500M+ annual debt service)
+                </div>
+            </div>
+
+            <!-- Reporting & Accounting Evolution -->
+            <div class="summary-box">
+                <h3>Reporting & Accounting Evolution</h3>
+
+                <h4>2008 Baseline</h4>
+                <div class="baseline-item">
+                    <strong>Framework:</strong> Thai GAAP<br>
+                    <strong>Depreciation:</strong> Depot 5–20yr, Hydrant 10–20yr, Vehicles 5yr<br>
+                    <strong>Metrics:</strong> Net profit only (no non-GAAP)
+                </div>
+
+                <h4>Key Changes (2008–2025)</h4>
+                <div class="baseline-item">
+                    <strong>2012:</strong> Useful lives extended—Depot to 5–28yr (+40%), Hydrant to 10–30yr (+50%)<br>
+                    Impact: ~THB 80–130M annual depreciation savings<br>
+                    <strong>2019:</strong> TFRS adoption (Thai IFRS equivalent)<br>
+                    <strong>2022:</strong> Concession accounting—THB 1.6B deferred over 20 years<br>
+                    <strong>2024:</strong> 'Adjusted EBITDA' metric emerges, excluding recurring impairments (THB 90M gap)<br>
+                    <strong>2025:</strong> Perpetual debentures (THB 1.2B) classified as financing, not interest expense
+                </div>
+
+                <h4>Assessment: COSMETIC (15–20% of gains)</h4>
+                <p><strong>Key Finding:</strong> Approximately 15–20% of reported margin improvement from COVID trough attributable to accounting policies, not operational improvement:</p>
+                <ul style="margin-left: 15px; margin-top: 10px; font-size: 13px;">
+                    <li>Depreciation compression: THB 80–130M/year</li>
+                    <li>Non-GAAP adjustments: THB 74–90M/year recurring items excluded</li>
+                    <li>Concession smoothing: THB 80M/year deferred income</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Comparison Table -->
+        <div class="table-section">
+            <h2>Comprehensive Timeline & Assessment</h2>
+
+            <div class="table-controls">
+                <input type="text" id="searchInput" placeholder="Search by period, change, category...">
+                <select id="filterAssessment">
+                    <option value="">All Assessments</option>
+                    <option value="positive">Positive</option>
+                    <option value="negative">Negative</option>
+                    <option value="neutral">Neutral</option>
+                    <option value="cosmetic">Cosmetic</option>
+                    <option value="mixed">Mixed</option>
+                    <option value="baseline">Baseline</option>
+                </select>
+                <select id="filterLayer">
+                    <option value="">All Layers</option>
+                    <option value="L1">Layer 1 (Business Model)</option>
+                    <option value="L2">Layer 2 (Reporting)</option>
+                </select>
+            </div>
+
+            <div id="tableContainer">
+                <table id="comparisonTable">
+                    <thead>
+                        <tr>
+                            <th>Period</th>
+                            <th>Change</th>
+                            <th>Layer</th>
+                            <th>Category</th>
+                            <th>Why It Matters</th>
+                            <th>Assessment</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <!-- Rows populated by JavaScript -->
+                    </tbody>
+                </table>
+                <div id="noResults" class="no-results" style="display:none;">No results match your filters.</div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <h3>Key Investor Takeaways</h3>
+            <p><strong>On-the-books recovery (118%)</strong> from THB 1.7B (2021) to THB 3.7B (2025) is predominantly REAL. After adjusting for accounting effects (depreciation, non-GAAP metrics, concession smoothing), organic revenue growth remains ~98%, indicating strong operational improvement.</p>
+            <p><strong>Net margin compression</strong> from 24.5% (2019) to 4.2% (2025) is NOT accounting-driven; it reflects THB 500M+ annual financing burden from COVID-era debt and low leverage recovery post-expansion.</p>
+            <p><strong>Segment diversification</strong> is genuine. Pipeline (FPT) and solar power (Adder) represent sustainable new revenue streams, not one-time items. Pipeline utilities growing fastest (+46% volume in 2024, +10% in 2025).</p>
+            <p><strong>'Adjusted EBITDA' skepticism warranted:</strong> The 'extra items' being excluded (goodwill impairment, DTA write-offs, fair value losses) are recurring annual charges, not one-time events. The adjusted/reported gap is WIDENING each year.</p>
+            <p><strong>Risk factors:</strong> China fuel concentration (17% of volume), LCC passenger mix shift at Don Mueang, and emerging competitive pressure in pipeline utilities.</p>
+            <h3 style="margin-top: 25px;">Conclusion</h3>
+            <p>BAFS is a REAL business recovery story (AMBER-leaning POSITIVE on fundamentals) masked by 15–20% of reported margin gain attributable to accounting. Investors should focus on EBITDA-level recovery and segment growth, while discounting reported net profit until finance costs normalize relative to revenue scale.</p>
+        </div>
+    </div>
+
+    <script>
+        // Table data
+        const tableData = [
+            {period: "2008", change: "Baseline: Aviation fuel at 2 airports, THB 2.1B revenue, ~25% net margin", layer: "L1", category: "Revenue Engine", why: "Starting point", assessment: "Baseline"},
+            {period: "2008", change: "Baseline: Thai GAAP, depot 5–20yr, hydrant 10–20yr, vehicles 5yr", layer: "L2", category: "Depreciation", why: "Starting point", assessment: "Baseline"},
+            {period: "2012", change: "Depot useful life extended to 5–28yr, hydrant to 10–30yr, vehicles to 3–20yr", layer: "L2", category: "Depreciation", why: "Reduces annual depreciation ~THB 20–40M, inflates margins", assessment: "Cosmetic"},
+            {period: "2012", change: "Subsidiaries TARCO+JP-One contribute 28% of service income", layer: "L1", category: "Revenue Engine", why: "Genuine diversification beyond single entity", assessment: "Positive"},
+            {period: "2015", change: "Revenue reaches THB 3.4B, expanded to 5 airports", layer: "L1", category: "Geographic Mix", why: "Real geographic expansion", assessment: "Positive"},
+            {period: "2015", change: "Net margin 28.5%, gross margin 55.9%", layer: "L1", category: "Margin Engine", why: "Peak profitability period", assessment: "Positive"},
+            {period: "2019", change: "Revenue peaks at THB 4.0B pre-COVID, 307K flights", layer: "L1", category: "Revenue Engine", why: "Full utilization of expanded infrastructure", assessment: "Positive"},
+            {period: "2019", change: "Full TFRS adoption (Thai IFRS equivalent)", layer: "L2", category: "Standards", why: "Improved international comparability", assessment: "Neutral"},
+            {period: "2019", change: "Net margin compresses to 24.5%", layer: "L1", category: "Margin Engine", why: "Expansion costs + competitive pressure", assessment: "Negative"},
+            {period: "2021", change: "COVID: Revenue drops 58% to THB 1.7B, net loss THB 785M", layer: "L1", category: "Revenue Engine", why: "External shock, not business deterioration", assessment: "Negative"},
+            {period: "2021", change: "Renewable energy segment added: 49.4 MW solar, THB 270M revenue", layer: "L1", category: "Segment Mix", why: "Diversification into power generation", assessment: "Positive"},
+            {period: "2021", change: "3-segment reporting introduced (Aviation/Utilities/Power)", layer: "L2", category: "Segment Definition", why: "Better visibility but makes historical comparison harder", assessment: "Mixed"},
+            {period: "2022", change: "FPT pipeline concession: THB 1.6B advance deferred over 20 years", layer: "L2", category: "Revenue Recognition", why: "Smooths THB 80M/year into income over 20 years", assessment: "Cosmetic"},
+            {period: "2024", change: "Revenue recovers to THB 3.5B, first profit since COVID (THB 103M)", layer: "L1", category: "Revenue Engine", why: "Genuine recovery driven by tourism + pipeline growth", assessment: "Positive"},
+            {period: "2024", change: "'Adjusted EBITDA excluding extra items' introduced", layer: "L2", category: "Non-GAAP", why: "Creates THB 90M gap between reported and adjusted profit", assessment: "Cosmetic"},
+            {period: "2024", change: "Goodwill impairment THB 38M + DTA write-off THB 34M classified as 'extra'", layer: "L2", category: "Impairment", why: "Recurring charges excluded from adjusted metrics", assessment: "Cosmetic"},
+            {period: "2024", change: "EBITDA margin 45.5%, but net margin only 0.7%", layer: "L1", category: "Margin Engine", why: "Massive gap between EBITDA and net due to THB 500M+ finance costs", assessment: "Mixed"},
+            {period: "2024", change: "Pipeline volume 1,226ML (+46%), 36% market share", layer: "L1", category: "Revenue Engine", why: "Utilities segment genuine growth story", assessment: "Positive"},
+            {period: "2024", change: "Depreciation THB 670M (would be ~THB 750–800M under 2008 lives)", layer: "L2", category: "Depreciation", why: "THB 80–130M annual benefit from 2012 useful life extensions", assessment: "Cosmetic"},
+            {period: "2025", change: "Revenue THB 3.7B, net profit THB 212M, EBITDA margin 47.3%", layer: "L1", category: "Revenue Engine", why: "Continued genuine recovery", assessment: "Positive"},
+            {period: "2025", change: "Perpetual debentures THB 1.2B, dividends as financing not interest", layer: "L2", category: "Expense Classification", why: "Reduces apparent interest expense in income statement", assessment: "Cosmetic"}
+        ];
+
+        function renderTable(data) {
+            const tableBody = document.getElementById('tableBody');
+            const noResults = document.getElementById('noResults');
+
+            if (data.length === 0) {
+                tableBody.innerHTML = '';
+                noResults.style.display = 'block';
+                return;
+            }
+
+            noResults.style.display = 'none';
+            tableBody.innerHTML = data.map(row => `
+                <tr class="layer-${row.layer.toLowerCase()}">
+                    <td><strong>${row.period}</strong></td>
+                    <td>${row.change}</td>
+                    <td><strong>${row.layer}</strong></td>
+                    <td>${row.category}</td>
+                    <td>${row.why}</td>
+                    <td><span class="assessment ${row.assessment.toLowerCase()}">${row.assessment}</span></td>
+                </tr>
+            `).join('');
+        }
+
+        function filterTable() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const assessment = document.getElementById('filterAssessment').value;
+            const layer = document.getElementById('filterLayer').value;
+
+            const filtered = tableData.filter(row => {
+                const matchesSearch = !searchTerm ||
+                    row.period.toLowerCase().includes(searchTerm) ||
+                    row.change.toLowerCase().includes(searchTerm) ||
+                    row.category.toLowerCase().includes(searchTerm) ||
+                    row.why.toLowerCase().includes(searchTerm);
+
+                const matchesAssessment = !assessment || row.assessment.toLowerCase() === assessment;
+                const matchesLayer = !layer || row.layer === layer;
+
+                return matchesSearch && matchesAssessment && matchesLayer;
+            });
+
+            renderTable(filtered);
+        }
+
+        // Event listeners
+        document.getElementById('searchInput').addEventListener('input', filterTable);
+        document.getElementById('filterAssessment').addEventListener('change', filterTable);
+        document.getElementById('filterLayer').addEventListener('change', filterTable);
+
+        // Initial render
+        renderTable(tableData);
+    </script>
+</body>
+</html>
