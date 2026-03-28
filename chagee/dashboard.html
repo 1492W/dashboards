@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="../auth.js"></script>
+  <title>CHAGEE US Monthly Snapshot</title>
+  <style>
+    :root {
+      --bg: #f6f7fb;
+      --card: #ffffff;
+      --text: #18202a;
+      --muted: #667085;
+      --line: #e7eaf0;
+      --green: #1f9d63;
+      --green-bg: #eaf8f1;
+      --yellow: #b7791f;
+      --yellow-bg: #fff6e5;
+      --red: #c53030;
+      --red-bg: #fdecec;
+      --blue: #2563eb;
+      --shadow: 0 10px 30px rgba(18, 24, 40, 0.08);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background: linear-gradient(180deg, #f8fafc 0%, #f5f7fb 100%);
+      line-height: 1.55;
+    }
+
+    .wrap {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 32px 20px 48px;
+    }
+
+    .hero {
+      background: radial-gradient(circle at top right, rgba(37,99,235,0.10), transparent 32%), var(--card);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      color: var(--blue);
+      background: rgba(37, 99, 235, 0.08);
+      padding: 8px 12px;
+      border-radius: 999px;
+    }
+
+    h1 {
+      margin: 14px 0 10px;
+      font-size: clamp(28px, 4vw, 42px);
+      line-height: 1.1;
+    }
+
+    .sub {
+      margin: 0;
+      color: var(--muted);
+      font-size: 16px;
+      max-width: 860px;
+    }
+
+    .meta {
+      margin-top: 18px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .pill {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 13px;
+      color: var(--muted);
+      background: #fff;
+    }
+
+    .status-banner {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 14px;
+      align-items: stretch;
+    }
+
+    .status-box,
+    .summary-box {
+      border-radius: 20px;
+      padding: 18px;
+    }
+
+    .status-box {
+      background: var(--yellow-bg);
+      border: 1px solid rgba(183,121,31,0.18);
+    }
+
+    .status-label {
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--yellow);
+      margin-bottom: 6px;
+    }
+
+    .status-value {
+      font-size: 36px;
+      font-weight: 800;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .summary-box {
+      background: #f9fbff;
+      border: 1px solid var(--line);
+    }
+
+    .grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .cards-4 {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      margin: 20px 0;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .metric-label {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .metric-value {
+      font-size: 34px;
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 6px;
+    }
+
+    .metric-note {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .section-title {
+      margin: 8px 0 14px;
+      font-size: 22px;
+    }
+
+    .cards-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin-bottom: 16px;
+    }
+
+    .cards-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      margin-bottom: 16px;
+    }
+
+    .kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 12px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 999px;
+      padding: 7px 11px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .green { color: var(--green); background: var(--green-bg); }
+    .yellow { color: var(--yellow); background: var(--yellow-bg); }
+    .red { color: var(--red); background: var(--red-bg); }
+
+    ul {
+      margin: 10px 0 0 18px;
+      padding: 0;
+    }
+
+    li + li { margin-top: 7px; }
+
+    .stores {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .store-tag {
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: #f4f6fa;
+      border: 1px solid var(--line);
+      font-size: 13px;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--card);
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+    }
+
+    th, td {
+      text-align: left;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+      font-size: 14px;
+    }
+
+    th {
+      background: #f8fafc;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    tr:last-child td { border-bottom: 0; }
+
+    .small {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .footnote {
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    a:hover { text-decoration: underline; }
+
+    .source-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .source-item {
+      background: #fbfcfe;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px;
+      font-size: 14px;
+    }
+
+    @media (max-width: 960px) {
+      .cards-4, .cards-3, .cards-2, .status-banner {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <a href="../index.html" style="display:inline-flex;align-items:center;gap:6px;color:#5f6368;font-size:13px;text-decoration:none;margin-bottom:12px;transition:color .2s" onmouseover="this.style.color='#2563eb'" onmouseout="this.style.color='#5f6368'">â Back to All Dashboards</a><br>
+      <div class="eyebrow">CHAGEE US â¢ Monthly Snapshot</div>
+      <h1>CHAGEE US Dashboard</h1>
+      <p class="sub">
+        Public-data dashboard for a quick read on whether CHAGEE in the U.S. is scaling with real momentum or still riding opening hype.
+        This page uses only public sources and proxy signals, not internal store-level sales data.
+      </p>
+
+      <div class="meta">
+        <div class="pill">As of: 29 Mar 2026</div>
+        <div class="pill">Geography: United States (current public focus: Southern California)</div>
+        <div class="pill">Method: Official site + app stores + investor release + public review/delivery proxies</div>
+      </div>
+
+      <div class="status-banner">
+        <div class="status-box">
+          <div class="status-label">Overall</div>
+          <div class="status-value">Yellow</div>
+          <div class="small">Leaning Green</div>
+        </div>
+        <div class="summary-box">
+          <strong>Executive read:</strong>
+          CHAGEE US looks like it is <strong>opening the game well</strong> rather than having fully proven a durable win already.
+          Store expansion, app/loyalty investment, and opening buzz are strong. The main holdback is that consumer sentiment on taste and value still looks mixed,
+          and public data cannot confirm repeat rate, same-store sales, or store-level unit economics.
+        </div>
+      </div>
+    </section>
+
+    <section class="grid cards-4">
+      <article class="card">
+        <div class="metric-label">Publicly listed US stores</div>
+        <div class="metric-value">9</div>
+        <div class="metric-note">Shown on official CHAGEE US store locator.</div>
+      </article>
+      <article class="card">
+        <div class="metric-label">iOS app rating</div>
+        <div class="metric-value">4.1</div>
+        <div class="metric-note">23 ratings visible on App Store at time checked.</div>
+      </article>
+      <article class="card">
+        <div class="metric-label">Android installs</div>
+        <div class="metric-value">5K+</div>
+        <div class="metric-note">Google Play public install bucket.</div>
+      </article>
+      <article class="card">
+        <div class="metric-label">Status color</div>
+        <div class="metric-value">Yellow</div>
+        <div class="metric-note">Strong rollout signals, but product-love proof is still incomplete.</div>
+      </article>
+    </section>
+
+    <h2 class="section-title">Scorecard</h2>
+    <section class="grid cards-3">
+      <article class="card">
+        <div class="kicker">Store footprint</div>
+        <div class="badge green">Green</div>
+        <ul>
+          <li>Official locator currently shows <strong>9 Southern California stores</strong>.</li>
+          <li>Rollout has moved beyond a single flagship into a small network.</li>
+          <li>Good sign for brand ambition and partner execution.</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <div class="kicker">Opening momentum</div>
+        <div class="badge green">Green</div>
+        <ul>
+          <li>Multiple public reports describe strong launch-day traffic and long lines.</li>
+          <li>Recent openings in Mission Viejo and Long Beach suggest the brand is still pressing forward.</li>
+          <li>Public demand signals remain positive at the top of funnel.</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <div class="kicker">Reviews & sentiment</div>
+        <div class="badge yellow">Yellow</div>
+        <ul>
+          <li>Coverage and review proxies show real interest, but opinions on taste/value are mixed.</li>
+          <li>Some reviewers praise quality and aesthetics; others say the product does not fully justify the hype.</li>
+          <li>This is the biggest reason the dashboard is not fully Green.</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <div class="kicker">App & loyalty</div>
+        <div class="badge green">Green</div>
+        <ul>
+          <li>CHAGEE USA app supports rewards, ordering, and store finder.</li>
+          <li>Android app was updated on <strong>16 Mar 2026</strong>, showing continued product support.</li>
+          <li>Good proxy that the team is trying to build repeat behavior, not just launch buzz.</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <div class="kicker">Delivery convenience</div>
+        <div class="badge yellow">Yellow</div>
+        <ul>
+          <li>Delivery and pickup surfaces exist publicly for at least some stores.</li>
+          <li>Availability appears inconsistent across locations and moments in time.</li>
+          <li>Useful channel, but not yet a clear strength from public evidence alone.</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <div class="kicker">Company backdrop</div>
+        <div class="badge green">Green</div>
+        <ul>
+          <li>Corporate disclosures still show strong overseas momentum at the aggregate level.</li>
+          <li>That does not prove U.S. store economics, but it supports the idea that overseas expansion remains strategic.</li>
+          <li>Good tailwind for continued U.S. investment.</li>
+        </ul>
+      </article>
+    </section>
+
+    <section class="card">
+      <h2 class="section-title">Current US Store Footprint</h2>
+      <p class="small">Names visible on the official CHAGEE US store locator at the time checked.</p>
+      <div class="stores">
+        <span class="store-tag">Westfield Century City</span>
+        <span class="store-tag">Americana</span>
+        <span class="store-tag">Ontario</span>
+        <span class="store-tag">Mission Viejo</span>
+        <span class="store-tag">Long Beach</span>
+        <span class="store-tag">Culver City</span>
+        <span class="store-tag">Fashion Square</span>
+        <span class="store-tag">Brea Mall</span>
+        <span class="store-tag">Del Amo Fashion Center</span>
+      </div>
+    </section>
+
+    <section class="grid cards-2">
+      <article class="card">
+        <h2 class="section-title">What looks strong</h2>
+        <ul>
+          <li><strong>Footprint growth:</strong> moving from a debut store into a broader SoCal cluster is a meaningful signal.</li>
+          <li><strong>Marketing energy:</strong> launches are getting attention in local press and lifestyle channels.</li>
+          <li><strong>Digital stack:</strong> rewards + ordering + fresh app updates imply retention is a priority.</li>
+          <li><strong>Corporate support:</strong> overseas growth still looks strong enough to justify continued expansion.</li>
+        </ul>
+      </article>
+      <article class="card">
+        <h2 class="section-title">What still needs proof</h2>
+        <ul>
+          <li><strong>Repeat behavior:</strong> public data cannot show 30/60/90-day repeat rate.</li>
+          <li><strong>Unit economics:</strong> no public read on four-wall margin, labor pressure, or rent efficiency.</li>
+          <li><strong>Same-store stability:</strong> no clean public proof that demand holds after novelty fades.</li>
+          <li><strong>Product love:</strong> taste/value perception is not yet decisively strong across public commentary.</li>
+        </ul>
+      </article>
+    </section>
+
+    <section class="card">
+      <h2 class="section-title">Public-data checklist for next month</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Track</th>
+              <th>What to check next</th>
+              <th>Why it matters</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Store count</td>
+              <td>Does the official locator add another location?</td>
+              <td>Expansion cadence is the cleanest public signal that the rollout still has momentum.</td>
+            </tr>
+            <tr>
+              <td>Review momentum</td>
+              <td>Are review counts still rising across stores, especially after opening month?</td>
+              <td>Helps distinguish durable traffic from one-off launch excitement.</td>
+            </tr>
+            <tr>
+              <td>Sentiment quality</td>
+              <td>Do comments shift toward taste and repeat purchase, not just aesthetics?</td>
+              <td>Better proxy for real consumer love.</td>
+            </tr>
+            <tr>
+              <td>Delivery stability</td>
+              <td>Do stores stay live on delivery apps more consistently?</td>
+              <td>Convenience and reliability matter for scaling beyond hype.</td>
+            </tr>
+            <tr>
+              <td>App health</td>
+              <td>Are there fresh updates, more reviews, or signs of reward usage?</td>
+              <td>Good indicator that CHAGEE is trying to build a repeat engine.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="footnote">
+        Interpretation rule: if store count grows, review velocity stays healthy, and sentiment increasingly mentions product quality rather than just the visual brand,
+        the dashboard can move from <strong>Yellow</strong> toward <strong>Green</strong>.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2 class="section-title">Source links</h2>
+      <div class="source-list">
+        <div class="source-item"><a href="https://www.chagee.us/stores" target="_blank" rel="noopener noreferrer">Official CHAGEE US store locator</a> â used for current public U.S. store footprint.</div>
+        <div class="source-item"><a href="https://apps.apple.com/us/app/chagee-usa/id6737460668" target="_blank" rel="noopener noreferrer">CHAGEE USA on the App Store</a> â used for iOS rating, features, and version notes.</div>
+        <div class="source-item"><a href="https://play.google.com/store/apps/details?hl=en-US&id=com.chagee.us.application" target="_blank" rel="noopener noreferrer">CHAGEE USA on Google Play</a> â used for install bucket and latest update date.</div>
+        <div class="source-item"><a href="https://investor.chagee.com/node/7076/html" target="_blank" rel="noopener noreferrer">CHAGEE Q3 2025 financial release</a> â used for aggregate overseas/company backdrop.</div>
+        <div class="source-item"><a href="https://dailybruin.com/2025/05/18/restaurant-review-chagee-modern-tea-houses-1st-us-location-delivers-both-aesthetic-and-flavor" target="_blank" rel="noopener noreferrer">Daily Bruin review</a> â positive product and launch commentary proxy.</div>
+        <div class="source-item"><a href="https://www.timeout.com/los-angeles/news/review-i-tried-the-buzzy-new-starbucks-of-tea-that-just-opened-in-century-city-and-it-didnt-live-up-to-the-hype-062425" target="_blank" rel="noopener noreferrer">Time Out Los Angeles review</a> â more skeptical product/value commentary proxy.</div>
+        <div class="source-item"><a href="https://lariatnews.com/uncategorized/chagee-modern-teahouse-opens-new-location-at-the-shops-at-mission-viejo/" target="_blank" rel="noopener noreferrer">Mission Viejo opening coverage</a> â recent opening momentum proxy.</div>
+        <div class="source-item"><a href="https://order.chagee.us/" target="_blank" rel="noopener noreferrer">Official CHAGEE ordering surface</a> â ordering/pickup signal.</div>
+        <div class="source-item"><a href="https://www.ubereats.com/store/chagee-century-city/ZtqvzoKdUoGV98LlMByUew" target="_blank" rel="noopener noreferrer">Uber Eats store page example</a> â delivery availability proxy.</div>
+        <div class="source-item"><a href="https://joe.coffee/locations/ca/los-angeles/chagee-modern-teahouse-los-angeles-d80ab450-f9ec-4c17-8acc-338086824583/" target="_blank" rel="noopener noreferrer">Joe Coffee listing for Century City</a> â public review proxy.</div>
+      </div>
+      <p class="footnote">
+        Note: because this dashboard is built from public data only, store-level sales, repeat rate, AOV, and four-wall margin are not observable directly.
+      </p>
+    </section>
+  </div>
+</body>
+</html>
