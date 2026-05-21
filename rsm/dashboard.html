@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="../auth.js"></script>
+  <title>红星美凯龙 (Macalline) — Thesis Dashboard</title>
+  <style>
+    :root {
+      --bg: #f6f7fb;
+      --card: #ffffff;
+      --text: #18202a;
+      --muted: #667085;
+      --line: #e7eaf0;
+      --green: #1f9d63;
+      --green-bg: #eaf8f1;
+      --yellow: #b7791f;
+      --yellow-bg: #fff6e5;
+      --red: #c53030;
+      --red-bg: #fdecec;
+      --blue: #2563eb;
+      --shadow: 0 10px 30px rgba(18, 24, 40, 0.08);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background: linear-gradient(180deg, #f8fafc 0%, #f5f7fb 100%);
+      line-height: 1.55;
+    }
+
+    .wrap {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 32px 20px 48px;
+    }
+
+    .hero {
+      background: radial-gradient(circle at top right, rgba(37,99,235,0.10), transparent 32%), var(--card);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      color: var(--blue);
+      background: rgba(37, 99, 235, 0.08);
+      padding: 8px 12px;
+      border-radius: 999px;
+    }
+
+    h1 {
+      margin: 14px 0 10px;
+      font-size: clamp(28px, 4vw, 42px);
+      line-height: 1.1;
+    }
+
+    .sub {
+      margin: 0;
+      color: var(--muted);
+      font-size: 16px;
+      max-width: 860px;
+    }
+
+    .meta {
+      margin-top: 18px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .pill {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 13px;
+      color: var(--muted);
+      background: #fff;
+    }
+
+    .status-banner {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 14px;
+      align-items: stretch;
+    }
+
+    .status-box, .summary-box {
+      border-radius: 20px;
+      padding: 18px;
+    }
+
+    .status-box {
+      background: var(--yellow-bg);
+      border: 1px solid rgba(183,121,31,0.18);
+    }
+
+    .status-label {
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--yellow);
+      margin-bottom: 6px;
+    }
+
+    .status-value {
+      font-size: 36px;
+      font-weight: 800;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .summary-box {
+      background: #f9fbff;
+      border: 1px solid var(--line);
+    }
+
+    .grid { display: grid; gap: 16px; }
+
+    .cards-4 {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      margin: 20px 0;
+    }
+
+    .cards-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      margin-bottom: 16px;
+    }
+
+    .cards-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin-bottom: 16px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .metric-label {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .metric-value {
+      font-size: 32px;
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 6px;
+    }
+
+    .metric-note {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .metric-value.red { color: var(--red); }
+    .metric-value.green { color: var(--green); }
+
+    .section-title {
+      margin: 24px 0 14px;
+      font-size: 22px;
+    }
+
+    .kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 12px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 999px;
+      padding: 7px 11px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .green { color: var(--green); background: var(--green-bg); }
+    .yellow { color: var(--yellow); background: var(--yellow-bg); }
+    .red { color: var(--red); background: var(--red-bg); }
+
+    ul { margin: 10px 0 0 18px; padding: 0; }
+    li + li { margin-top: 7px; }
+
+    .table-wrap { overflow-x: auto; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--card);
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+    }
+
+    th, td {
+      text-align: left;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+      font-size: 14px;
+    }
+
+    th {
+      background: #f8fafc;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    tr:last-child td { border-bottom: 0; }
+
+    .num { text-align: right; font-variant-numeric: tabular-nums; }
+    .num.red { color: var(--red); }
+    .num.green { color: var(--green); }
+
+    .small { font-size: 12px; color: var(--muted); }
+    .footnote { margin-top: 18px; color: var(--muted); font-size: 13px; }
+
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .source-list { display: grid; gap: 10px; margin-top: 10px; }
+    .source-item {
+      background: #fbfcfe;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px;
+      font-size: 14px;
+    }
+
+    .timeline {
+      position: relative;
+      padding-left: 28px;
+      margin-top: 16px;
+    }
+    .timeline::before {
+      content: "";
+      position: absolute;
+      left: 8px;
+      top: 6px;
+      bottom: 6px;
+      width: 2px;
+      background: var(--line);
+    }
+    .tl-item {
+      position: relative;
+      padding-bottom: 18px;
+    }
+    .tl-item::before {
+      content: "";
+      position: absolute;
+      left: -24px;
+      top: 6px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--blue);
+      border: 2px solid #fff;
+      box-shadow: 0 0 0 2px var(--blue);
+    }
+    .tl-item.warning::before { background: var(--yellow); box-shadow: 0 0 0 2px var(--yellow); }
+    .tl-item.bad::before { background: var(--red); box-shadow: 0 0 0 2px var(--red); }
+    .tl-item.good::before { background: var(--green); box-shadow: 0 0 0 2px var(--green); }
+    .tl-date {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .tl-title {
+      font-size: 15px;
+      font-weight: 700;
+      margin: 2px 0 4px;
+    }
+    .tl-body { font-size: 14px; color: #2c3845; }
+
+    .callout {
+      background: linear-gradient(135deg, #eef4ff 0%, #f9fbff 100%);
+      border: 1px solid #d6e4ff;
+      border-radius: 16px;
+      padding: 20px;
+      margin: 16px 0;
+    }
+    .callout-title {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--blue);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    @media (max-width: 960px) {
+      .cards-4, .cards-3, .cards-2, .status-banner {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <a href="../index.html" style="display:inline-flex;align-items:center;gap:6px;color:#5f6368;font-size:13px;text-decoration:none;margin-bottom:12px;transition:color .2s" onmouseover="this.style.color='#2563eb'" onmouseout="this.style.color='#5f6368'">← Back to All Dashboards</a><br>
+      <div class="eyebrow">红星美凯龙 • Turnaround Thesis Dashboard</div>
+      <h1>Macalline (601828.SH / 01528.HK)</h1>
+      <p class="sub">
+        ห้างวัสดุก่อสร้าง/เฟอร์นิเจอร์รายใหญ่ที่สุดของจีน อยู่ในช่วง turnaround หลังถูก 厦门建发 (รัฐวิสาหกิจเซียะเหมิน) เข้ามาเป็นผู้ถือหุ้นใหญ่ปี 2023
+        ตัวเลข headline ยังขาดทุนหนักจาก fair-value writedown ของ investment property แต่ operating fundamentals เริ่มฟื้น
+        — dashboard นี้แยกตัวเลข non-cash ออกจาก operating performance เพื่อดู thesis จริง ๆ
+      </p>
+
+      <div class="meta">
+        <div class="pill">As of: 22 May 2026</div>
+        <div class="pill">Tickers: 601828.SH · 01528.HK</div>
+        <div class="pill">Sector: Home improvement / commercial real estate</div>
+        <div class="pill">Parent: 厦门建发股份 (600153.SH) 23.95%</div>
+      </div>
+
+      <div class="status-banner">
+        <div class="status-box">
+          <div class="status-label">Thesis Status</div>
+          <div class="status-value">Yellow</div>
+          <div class="small">Operating ฟื้น, Balance sheet ยังเสี่ยง</div>
+        </div>
+        <div class="summary-box">
+          <strong>Executive read:</strong>
+          งบปี 2025 ขาดทุนสุทธิ -23,722 ล้านหยวน แต่ <strong>~98% มาจาก fair-value writedown</strong> ของ investment property
+          (-33.3 พันล้าน YTD Q3 ก่อนรวมไตรมาส 4) ส่วน operating fundamentals พลิกบวก: operating cash flow +277% YoY,
+          gross margin ธุรกิจหลัก +2pp, occupancy +2pp, cost cuts สามตัว (-19% / -19% / -24%), financing cost -70bp.
+          Governance reset เสร็จแล้ว (Founder ออกจาก operating role), แผน 5 ปีใหม่ชัดเจน,
+          synergy กับ 建发 เริ่มเห็นผลในกลุ่ม Auto + Electronics. ความเสี่ยงหลักคือ liquidity และ NAV ยังขึ้นกับวงจรอสังหาฯ จีน
+        </div>
+      </div>
+    </section>
+
+    <h2 class="section-title">Key Metrics — FY2025</h2>
+    <section class="grid cards-4">
+      <article class="card">
+        <div class="metric-label">Revenue</div>
+        <div class="metric-value">¥6.58B</div>
+        <div class="metric-note">FY2025 total. Down YoY แต่ส่วนใหญ่จากการ shrink construction services โดยตั้งใจ</div>
+      </article>
+      <article class="card">
+        <div class="metric-label">Net loss (reported)</div>
+        <div class="metric-value red">-¥23.7B</div>
+        <div class="metric-note">~98% เป็น non-cash fair-value writedown ของ investment property</div>
+      </article>
+      <article class="card">
+        <div class="metric-label">Operating cash flow</div>
+        <div class="metric-value green">¥816M</div>
+        <div class="metric-note">+277% YoY (เทียบ ¥216M ในปี 2024) — สัญญาณ operating turnaround</div>
+      </article>
+      <article class="card">
+        <div class="metric-label">Self-op mall occupancy</div>
+        <div class="metric-value green">85.0%</div>
+        <div class="metric-note">+2pp YoY · ลานเช่าฟื้น เป็น leading indicator ของ rental income</div>
+      </article>
+    </section>
+
+    <h2 class="section-title">Scorecard</h2>
+    <section class="grid cards-3">
+      <article class="card">
+        <div class="kicker">Operating fundamentals</div>
+        <div class="badge green">Green</div>
+        <ul>
+          <li>Gross margin ธุรกิจ home commercial services <strong>+2pp เป็น 61.9%</strong></li>
+          <li>Occupancy ขึ้นทั้งฝั่ง self-op (+2pp = 85.0%) และ managed malls</li>
+          <li>Operating cash flow พลิกจาก ¥216M เป็น ¥816M (+277%)</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <div class="kicker">Cost discipline</div>
+        <div class="badge green">Green</div>
+        <ul>
+          <li>COGS <strong>-18.95%</strong>, sales expenses <strong>-18.59%</strong>, admin <strong>-24.22%</strong></li>
+          <li>ทุกตัวลดเร็วกว่ารายได้ที่หดตัว → operating leverage กลับด้าน</li>
+          <li>Financing cost rate ลงจาก 5.1% เหลือ 4.4% (ผลของ SOE backing)</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <div class="kicker">Balance sheet / Liquidity</div>
+        <div class="badge red">Red</div>
+        <ul>
+          <li>Current ratio Q3'25 = <strong>0.31</strong> · cash/current liab = 14.7%</li>
+          <li>Q2'25 มี short-term debt ¥1.55B + current portion of long-term ¥5.74B, เงินสด ¥3.97B</li>
+          <li>Payables ลด 43.79% YoY — กำลังจ่ายแทนรีไฟแนนซ์</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <div class="kicker">Governance reset</div>
+        <div class="badge green">Green</div>
+        <ul>
+          <li>Founder 车建兴 ถูกกักตัวสอบ พ.ค. 2025 → ลาออกจาก CEO ก.ค. 2025</li>
+          <li>ปลดมาตรการกักตัว ก.ย. 2025; ทีมใหม่จาก 建发 เข้าควบคุม</li>
+          <li>"去车建兴化" เสร็จภายใน 4 เดือน → uncertainty ส่วนนี้ปิดแล้ว</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <div class="kicker">Strategy under 建发</div>
+        <div class="badge green">Green</div>
+        <ul>
+          <li>แผน 5 ปีใหม่ (Dec 2025): heavy-asset + light-asset + supply chain + ecosystem</li>
+          <li>Auto category พื้นที่ <strong>เพิ่มเท่าตัว</strong> 160k → 320k ตร.ม. ครอบคลุม 46 เมือง</li>
+          <li>Electronics 1.41M ตร.ม. (10.1% ของพื้นที่) — leverage 建发轻工/建发汽车</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <div class="kicker">Real-estate cycle risk</div>
+        <div class="badge red">Red</div>
+        <ul>
+          <li>Investment property book value ขึ้นกับวงจรอสังหาฯ จีน — ยังไม่มีสัญญาณ bottom ชัด</li>
+          <li>FY2025 ตัด fair value -23B+ หยวนแล้ว; รอบสองเป็นไปได้ถ้าอสังหาฯ ดิ่งต่อ</li>
+          <li>Tier-1 NAV ถูกบีบ → ความสามารถจ่ายปันผลยังจำกัด</li>
+        </ul>
+      </article>
+    </section>
+
+    <div class="callout">
+      <div class="callout-title">Why headline loss is misleading</div>
+      งบ FY2025 ออกมาขาดทุน -23,722 ล้านหยวน แต่ถ้าดู Q3 cumulative มี fair-value loss จาก investment property อย่างเดียวประมาณ
+      <strong>-33.3 พันล้านหยวน</strong> + impairments อีก -1.7 พันล้าน — แปลว่า <em>operating</em> ของบริษัทไม่ได้ขาดทุนใกล้กับตัวเลข
+      headline ที่เห็น และที่สำคัญคือเป็น <strong>non-cash</strong> ทั้งหมด ตัวที่ต้องดูจริง ๆ คือ operating cash flow (+277% YoY) และ
+      gross margin ของ commercial services segment (+2pp = 61.9%) ที่ฟื้นชัด
+    </div>
+
+    <h2 class="section-title">Q1 2026 — ทรงตัว ยังไม่กลับด้าน</h2>
+    <section class="grid cards-2">
+      <article class="card">
+        <div class="kicker">Revenue Q1 2026</div>
+        <div class="metric-value">¥1.55B</div>
+        <div class="metric-note">เทียบ ¥1.62B Q1 2025 — ลดเพียง 4.1% YoY (vs FY2025 ที่ลดสองหลัก) → decline กำลังชะลอ</div>
+        <ul>
+          <li>Self-op + leasing segment ¥1.20B (75% ของ revenue)</li>
+          <li>ยังไม่กลับมาโตเป็นบวก แต่การหดตัวช้าลงชัด</li>
+        </ul>
+      </article>
+      <article class="card">
+        <div class="kicker">สิ่งที่ต้องดูใน Q2-Q3 2026</div>
+        <ul>
+          <li>Occupancy rate ขึ้นต่อหรือ flatten ที่ 85%</li>
+          <li>Rental yield per sqm — จะเริ่มขึ้นได้หรือยัง</li>
+          <li>Fair-value writedown รอบ 2 (กลางปีและปลายปี)</li>
+          <li>ตัวเลข supply chain B2B และ overseas pilot</li>
+          <li>Refinancing of ¥5.7B current portion debt</li>
+        </ul>
+      </article>
+    </section>
+
+    <h2 class="section-title">Governance Timeline</h2>
+    <div class="card">
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-date">2023 มกราคม</div>
+          <div class="tl-title">建发股份 เข้าเป็นผู้ถือหุ้นใหญ่</div>
+          <div class="tl-body">ซื้อหุ้น 29.95% จาก 红星控股 ราคา ¥6.3 พันล้าน · Founder 车建兴 จากเจ้าของกิจการกลายเป็นผู้ถือหุ้นรอง</div>
+        </div>
+        <div class="tl-item warning">
+          <div class="tl-date">2024 มิถุนายน</div>
+          <div class="tl-title">红星控股 (ผู้ถือหุ้นเดิม) ยื่นฟื้นฟูกิจการ</div>
+          <div class="tl-body">หนี้สิน &gt; ¥30B · บริษัทยืนยันธุรกิจของ Macalline เป็นอิสระจาก 红星控股 ในทุกมิติ</div>
+        </div>
+        <div class="tl-item bad">
+          <div class="tl-date">2025 พฤษภาคม</div>
+          <div class="tl-title">车建兴 ถูก 云南省监察委 กักตัวสอบสวน (留置)</div>
+          <div class="tl-body">ราคาหุ้นดิ่งหนัก ตอนนั้น Che ยังเป็น CEO อยู่</div>
+        </div>
+        <div class="tl-item warning">
+          <div class="tl-date">2025 กรกฎาคม</div>
+          <div class="tl-title">车建兴 ลาออกจาก CEO "ด้วยเหตุผลส่วนตัว"</div>
+          <div class="tl-body">ยังนั่งบอร์ดอยู่ แต่ไม่มีอำนาจ operating · ทีมจาก 建发 ขึ้นมาคุม</div>
+        </div>
+        <div class="tl-item warning">
+          <div class="tl-date">2025 ก.ย. 15</div>
+          <div class="tl-title">CFO/เลขาบอร์ดและรอง CEO หลายคนลาออก</div>
+          <div class="tl-body">"去车建兴化" รอบใหญ่ — ทีมเดิมของ Founder ถูกแทนที่</div>
+        </div>
+        <div class="tl-item good">
+          <div class="tl-date">2025 ก.ย. 22</div>
+          <div class="tl-title">ปลดมาตรการกักตัว 车建兴</div>
+          <div class="tl-body">Yunnan ปิดคดี · uncertainty ทางกฎหมายส่วนใหญ่จบ</div>
+        </div>
+        <div class="tl-item good">
+          <div class="tl-date">2025 ธันวาคม</div>
+          <div class="tl-title">แผนยุทธศาสตร์ 5 ปีใหม่</div>
+          <div class="tl-body">positioning: "ผู้ดำเนินธุรกิจการค้าใหม่ในวิถีชีวิต Home + ผู้ให้บริการ ecosystem อุตสาหกรรม"</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">2026 มี.ค. 30</div>
+          <div class="tl-title">FY2025 annual report + แผน valuation enhancement</div>
+          <div class="tl-body">บอร์ดผ่านมติแผนเพิ่มมูลค่าบริษัท · เป็นสัญญาณว่ามองมูลค่าหุ้นต่ำเกินจริง</div>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="section-title">โครงสร้างผู้ถือหุ้นปัจจุบัน</h2>
+    <div class="table-wrap card" style="padding:0">
+      <table>
+        <thead>
+          <tr><th>ผู้ถือหุ้น</th><th class="num">สัดส่วน</th><th>หมายเหตุ</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>厦门建发股份 (600153.SH)</td><td class="num">23.95%</td><td>รัฐวิสาหกิจเซียะเหมิน · ผู้ถือหุ้นใหญ่และคุมการบริหาร</td></tr>
+          <tr><td>红星美凯龙控股 (Founder's vehicle)</td><td class="num">18.94%</td><td>อยู่ในกระบวนการฟื้นฟูกิจการ · ความเสี่ยง force sell ยังไม่ปิด</td></tr>
+          <tr><td>HKSCC Nominees</td><td class="num">17.02%</td><td>นักลงทุนต่างชาติผ่าน H-share (01528.HK)</td></tr>
+          <tr><td>联发集团 (Lianfa Group)</td><td class="num">6.00%</td><td>Concert party กับ 建发 → กลุ่ม 建发 รวมคุมประมาณ 30%</td></tr>
+          <tr><td>杭州灏月企业管理</td><td class="num">4.40%</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 class="section-title">Asset Footprint</h2>
+    <section class="grid cards-3">
+      <article class="card">
+        <div class="metric-label">Self-operated malls</div>
+        <div class="metric-value">74</div>
+        <div class="metric-note">ลดลง 2 แห่งจาก 76 (มิ.ย. 2025) · ปิดสาขาที่ underperform</div>
+      </article>
+      <article class="card">
+        <div class="metric-label">Managed malls</div>
+        <div class="metric-value">218</div>
+        <div class="metric-note">ลดลง 17 แห่งจาก 235 (มิ.ย. 2025) · กำลังคัดของเสียออก</div>
+      </article>
+      <article class="card">
+        <div class="metric-label">Mini-program coverage</div>
+        <div class="metric-value">225 malls</div>
+        <div class="metric-note">PV 23.66M (+161% YoY) · UV 2.8M (+94% YoY) — digital traction ชัด</div>
+      </article>
+    </section>
+
+    <h2 class="section-title">Synergy กับ 建发 (สัญญาณวัดได้)</h2>
+    <div class="table-wrap card" style="padding:0">
+      <table>
+        <thead>
+          <tr><th>มิติ</th><th>FY2024</th><th>FY2025</th><th>Comment</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>พื้นที่ขายรถยนต์</td><td class="num">160,000 ตร.ม.</td><td class="num green">320,000 ตร.ม.</td><td>เพิ่มเท่าตัว, ใช้เครือข่าย 建发汽车 · ครอบคลุม 46 เมือง</td></tr>
+          <tr><td>พื้นที่ Electronics hall</td><td class="num">—</td><td class="num">1.41M ตร.ม.</td><td>10.1% ของพื้นที่รวม · ผ่าน 建发轻工</td></tr>
+          <tr><td>Financing cost rate</td><td class="num">5.1%</td><td class="num green">4.4%</td><td>SOE-backed funding · ประหยัดดอกเบี้ย ¥371M</td></tr>
+          <tr><td>Interest expense</td><td class="num">¥2.53B</td><td class="num green">¥2.16B</td><td>-15% YoY</td></tr>
+          <tr><td>Payables (AP + notes)</td><td class="num">100%</td><td class="num">56%</td><td>ลด 43.79% · clean-up หนี้เดิมเร็ว</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 class="section-title">แผนปี 2026 (4 ขาธุรกิจใหม่)</h2>
+    <section class="grid cards-2">
+      <article class="card">
+        <div class="kicker">1. Ecosystem อุตสาหกรรม home</div>
+        <ul>
+          <li>เปิด segment ใหม่ "山丘-美凯龙银发生活美学馆" จับ silver economy ที่เซี่ยงไฮ้</li>
+          <li>กลุ่ม metal customization ขยายทั่วประเทศ</li>
+          <li>3+星生态 (3+Star ecosystem): home + auto + electronics</li>
+        </ul>
+      </article>
+      <article class="card">
+        <div class="kicker">2. Supply chain B2B</div>
+        <ul>
+          <li>เน้น B-end (ผู้รับเหมา, developer, นักออกแบบ)</li>
+          <li>ทั้ง internal incubation และ external M&A</li>
+          <li>คาดเป็น growth engine ใหม่ที่ไม่พึ่งวงจรอสังหาฯ</li>
+        </ul>
+      </article>
+      <article class="card">
+        <div class="kicker">3. Decoration (ตกแต่ง)</div>
+        <ul>
+          <li>เป็นธุรกิจ startup ภายใน · กำลังตั้งระบบ</li>
+          <li>กระจายความเสี่ยงออกจาก mall rental</li>
+          <li>ปี 2026 = startup phase ยังไม่ contribute มาก</li>
+        </ul>
+      </article>
+      <article class="card">
+        <div class="kicker">4. Overseas (ใหม่)</div>
+        <ul>
+          <li>Leverage เครือข่าย international supply chain ของ 建发</li>
+          <li>พาแบรนด์วัสดุก่อสร้าง/Home จีน "เดินออกต่างประเทศ"</li>
+          <li>Pilot ใช้โมเดล <strong>light-asset export</strong> ของห้าง — ไม่ลงทุน hard asset เอง</li>
+        </ul>
+      </article>
+    </section>
+
+    <h2 class="section-title">Risks Matrix</h2>
+    <div class="table-wrap card" style="padding:0">
+      <table>
+        <thead>
+          <tr><th>Risk</th><th>Severity</th><th>Trigger to watch</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Fair-value writedown รอบ 2</td><td><span class="badge red">High</span></td><td>ดัชนีราคาอสังหาฯ commercial / rental yield จีนปลายปี 2026</td></tr>
+          <tr><td>Liquidity crunch (refinancing)</td><td><span class="badge red">High</span></td><td>¥5.7B current portion ครบกำหนดในปี · ดูว่ารีไฟแนนซ์ที่อัตราใด</td></tr>
+          <tr><td>红星控股 ถูกบังคับขายหุ้น 18.94%</td><td><span class="badge yellow">Medium</span></td><td>คำสั่งศาลฟื้นฟูกิจการของ 红星控股 · อาจเกิด overhang ใหญ่</td></tr>
+          <tr><td>Same-store revenue ฟื้นช้ากว่าคาด</td><td><span class="badge yellow">Medium</span></td><td>ดู occupancy + rental yield Q2 2026</td></tr>
+          <tr><td>Overseas pilot ล้มเหลว</td><td><span class="badge yellow">Medium</span></td><td>ดูข่าวการเปิดสาขาแรกในต่างประเทศ · model fit หรือไม่</td></tr>
+          <tr><td>การเมือง/regulator (สมัย Che)</td><td><span class="badge green">Low</span></td><td>คดีปิดแล้ว · uncertainty ส่วนนี้น่าจะจบ</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 class="section-title">เทียบกับคู่แข่งหลัก: 居然之家 (Easyhome, 000785.SZ)</h2>
+    <div class="table-wrap card" style="padding:0">
+      <table>
+        <thead>
+          <tr><th>มิติ</th><th>红星美凯龙</th><th>居然之家</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>ผู้ถือหุ้นใหญ่</td><td>建发股份 (SOE เซียะเหมิน)</td><td>Founder ครอบครัว Wang + Aliyun เคยลงทุน</td></tr>
+          <tr><td>จำนวนห้าง (ล่าสุด)</td><td>74 self-op + 218 managed</td><td>~400 stores (ผสม)</td></tr>
+          <tr><td>Business model หลัก</td><td>Rental + management fee</td><td>Rental + commission + supply chain</td></tr>
+          <tr><td>ความเสี่ยง parent</td><td>red — 红星控股 ฟื้นฟูกิจการ</td><td>ต่ำกว่า · ไม่มีผู้ถือหุ้นเดิมในวิกฤต</td></tr>
+          <tr><td>SOE backing</td><td>มี (financing benefit ชัดเจน)</td><td>ไม่มี · cost of debt สูงกว่า</td></tr>
+          <tr><td>ทิศทางใหม่</td><td>Auto + Electronics + overseas (ผ่าน 建发)</td><td>Smart home + digital + ecosystem</td></tr>
+        </tbody>
+      </table>
+      <div class="footnote" style="padding:0 16px 16px">
+        <em>ข้อสังเกต:</em> RSM ได้เปรียบเรื่อง cost of capital ผ่าน SOE shareholder แต่ Easyhome มี balance sheet ที่สะอาดกว่าและไม่มี overhang จากผู้ถือหุ้นเดิม
+        — เลือกระหว่าง <strong>"recovery upside ที่มีกระแสรัฐหนุน แต่ตัวเลข messy"</strong> (RSM) vs <strong>"steadier business แต่ไม่มี SOE catalyst"</strong> (Easyhome)
+      </div>
+    </div>
+
+    <h2 class="section-title">Key Sources</h2>
+    <div class="source-list">
+      <div class="source-item">
+        <strong>FY2025 annual report (30 มี.ค. 2026):</strong>
+        <a href="https://stockmc.xueqiu.com/202603/601828_20260331_6J7O.pdf" target="_blank">PDF</a> ·
+        ตัวเลข revenue, net loss, operating CF, mall counts, occupancy
+      </div>
+      <div class="source-item">
+        <strong>Q1 2026 quarterly report:</strong>
+        <a href="https://www.fxbaogao.com/detail/5381842" target="_blank">fxbaogao</a> ·
+        Revenue ¥1.548B, self-op+leasing ¥1.197B
+      </div>
+      <div class="source-item">
+        <strong>Sina Finance — "FY2025 main business stabilizes; loss from asset writedown" (1 เม.ย. 2026):</strong>
+        <a href="https://finance.sina.com.cn/jjxw/2026-04-01/doc-inhsyfuw2731765.shtml" target="_blank">link</a>
+      </div>
+      <div class="source-item">
+        <strong>Q3 2025 IR transcript:</strong>
+        <a href="https://file.finance.qq.com/finance/hs/pdf/2025/11/20/af07e7f2c5f711f0881cfa163e39923a.pdf" target="_blank">PDF</a> ·
+        fair-value loss -33.3B, impairments -1.7B confirmation
+      </div>
+      <div class="source-item">
+        <strong>China Fund — Founder detention release + executive turnover (23 ก.ย. 2025):</strong>
+        <a href="https://www.chnfund.com/article/AR5949d309-3146-c5dc-3c33-3a1c8770c625" target="_blank">link</a>
+      </div>
+      <div class="source-item">
+        <strong>Sina — "Che Jianxing out, Macalline -23.7B loss" (9 เม.ย. 2026):</strong>
+        <a href="https://finance.sina.com.cn/wm/2026-04-09/doc-inhtwtfe1023311.shtml" target="_blank">link</a> ·
+        Governance timeline detail
+      </div>
+      <div class="source-item">
+        <strong>Mall count announcement (8 ม.ค. 2026):</strong>
+        <a href="https://paper.cnstock.com/html/2026-01/08/content_2167868.htm" target="_blank">link</a> ·
+        74 self-op + 218 managed as of 31 ธ.ค. 2025
+      </div>
+      <div class="source-item">
+        <strong>5-year strategy + valuation enhancement plan (31 มี.ค. 2026):</strong>
+        <a href="https://paper.cnstock.com/html/2026-03/31/content_2194540.htm" target="_blank">link</a>
+      </div>
+    </div>
+
+    <div class="footnote">
+      Dashboard นี้ใช้ข้อมูลสาธารณะเป็นหลัก ไม่ใช่ official research report ของ broker · ตัวเลขทั้งหมดเป็นหยวน CNY เว้นระบุไว้
+      อัพเดทล่าสุด: 22 พ.ค. 2026
+    </div>
+  </div>
+</body>
+</html>
