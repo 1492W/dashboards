@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Macalline · Q1 2026 Earnings Update</title>
+<script src="../auth.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;0,8..60,700;1,8..60,400&family=Noto+Serif+Thai:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1A3A5C;
+    --navy-deep: #0F2640;
+    --navy-soft: #4a6788;
+    --ink: #1a1a1a;
+    --ink-soft: #3d3d3d;
+    --paper: #FAF7F2;
+    --paper-warm: #F4EEE0;
+    --paper-cream: #FBF9F5;
+    --rule: #d4cfc4;
+    --rule-soft: #e8e3d8;
+    --green: #2d6a4f;
+    --red: #9d2b2b;
+    --mustard: #b7791f;
+    --highlight: #FFF4D6;
+    --serif-display: 'Cormorant Garamond', 'Noto Serif Thai', Georgia, serif;
+    --serif-body: 'Source Serif 4', 'Noto Serif Thai', Georgia, serif;
+    --thai: 'Noto Serif Thai', 'Source Serif 4', Georgia, serif;
+    --mono: 'JetBrains Mono', 'Menlo', monospace;
+  }
+  
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  html { scroll-behavior: smooth; }
+  
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--serif-body);
+    font-size: 16px;
+    line-height: 1.55;
+    font-feature-settings: "kern" 1, "liga" 1, "onum" 1;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  
+  /* ===== layout ===== */
+  .wrap {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+  
+  /* ===== masthead ===== */
+  .masthead {
+    border-bottom: 1px solid var(--ink);
+    padding: 28px 0 22px;
+    margin-bottom: 60px;
+    position: relative;
+  }
+  .masthead::after {
+    content: "";
+    position: absolute;
+    bottom: -5px; left: 0; right: 0;
+    height: 1px; background: var(--ink);
+  }
+  .masthead-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 18px;
+    font-family: var(--serif-body);
+    font-weight: 500;
+  }
+  .masthead-top .dot {
+    color: var(--mustard);
+    margin: 0 8px;
+  }
+  .ticker-bar {
+    display: flex;
+    gap: 22px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.05em;
+  }
+  .ticker { color: var(--ink-soft); }
+  .ticker strong { color: var(--ink); font-weight: 600; }
+  
+  .hero-title {
+    font-family: var(--serif-display);
+    font-size: clamp(48px, 7vw, 88px);
+    font-weight: 500;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    margin-bottom: 18px;
+    color: var(--ink);
+  }
+  .hero-title .cn {
+    font-family: var(--serif-display);
+    font-weight: 600;
+    color: var(--navy);
+    display: block;
+    font-size: 0.55em;
+    letter-spacing: 0.02em;
+    margin-bottom: 6px;
+    font-style: italic;
+  }
+  .hero-dek {
+    font-family: var(--serif-display);
+    font-style: italic;
+    font-size: clamp(20px, 2.6vw, 28px);
+    line-height: 1.4;
+    color: var(--ink-soft);
+    max-width: 800px;
+    font-weight: 400;
+  }
+  .hero-byline {
+    margin-top: 24px;
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    border-top: 1px solid var(--rule);
+    padding-top: 14px;
+    display: flex;
+    gap: 26px;
+    flex-wrap: wrap;
+  }
+  .hero-byline span strong {
+    color: var(--ink);
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+  
+  /* ===== body layout: sidebar + article ===== */
+  .layout {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 60px;
+  }
+  @media (max-width: 980px) {
+    .layout { grid-template-columns: 1fr; gap: 24px; }
+  }
+  
+  /* ===== sticky TOC ===== */
+  .toc {
+    position: sticky;
+    top: 28px;
+    align-self: start;
+    font-size: 12px;
+    line-height: 1.7;
+    padding-right: 12px;
+    border-right: 1px solid var(--rule);
+    max-height: calc(100vh - 60px);
+    overflow-y: auto;
+  }
+  @media (max-width: 980px) {
+    .toc {
+      position: relative;
+      max-height: none;
+      border-right: none;
+      border-bottom: 1px solid var(--rule);
+      padding: 0 0 18px 0;
+      margin-bottom: 18px;
+    }
+  }
+  .toc-label {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--navy);
+    font-weight: 700;
+    margin-bottom: 14px;
+    font-family: var(--serif-body);
+  }
+  .toc ol {
+    list-style: none;
+    counter-reset: toc;
+  }
+  .toc li {
+    counter-increment: toc;
+    padding: 4px 0;
+  }
+  .toc a {
+    color: var(--ink-soft);
+    text-decoration: none;
+    display: block;
+    padding: 6px 0;
+    border-top: 1px solid var(--rule-soft);
+    transition: color 0.2s, padding 0.2s;
+  }
+  .toc li:first-child a { border-top: none; }
+  .toc a::before {
+    content: "0" counter(toc) " ";
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--mustard);
+    margin-right: 8px;
+    letter-spacing: 0.05em;
+  }
+  .toc a:hover {
+    color: var(--navy);
+    padding-left: 4px;
+  }
+  
+  /* ===== article ===== */
+  article { max-width: 760px; }
+  
+  /* ===== section heading ===== */
+  section { margin-bottom: 56px; }
+  section:first-child { margin-top: 0; }
+  
+  h2.section-h {
+    font-family: var(--serif-display);
+    font-size: 38px;
+    font-weight: 500;
+    color: var(--ink);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    margin-bottom: 8px;
+    position: relative;
+    padding-top: 24px;
+  }
+  h2.section-h::before {
+    content: attr(data-num);
+    position: absolute;
+    top: -2px;
+    left: 0;
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    color: var(--mustard);
+    font-weight: 500;
+  }
+  .section-sub {
+    font-family: var(--serif-display);
+    font-style: italic;
+    color: var(--ink-soft);
+    font-size: 18px;
+    margin-bottom: 24px;
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 12px;
+  }
+  
+  /* ===== executive snapshot — magazine pull-quote box ===== */
+  .exec-box {
+    background: var(--paper-warm);
+    border-left: 4px solid var(--navy);
+    padding: 32px 36px;
+    margin: 0 0 32px 0;
+    position: relative;
+  }
+  .exec-box::before {
+    content: "EXECUTIVE SNAPSHOT";
+    position: absolute;
+    top: -12px;
+    left: 24px;
+    background: var(--navy);
+    color: var(--paper);
+    padding: 4px 14px;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    font-weight: 600;
+    font-family: var(--serif-body);
+  }
+  .exec-box p {
+    font-family: var(--serif-body);
+    font-size: 15.5px;
+    line-height: 1.65;
+    margin-bottom: 14px;
+  }
+  .exec-box p:last-child { margin-bottom: 0; }
+  .exec-box .lead {
+    font-family: var(--serif-display);
+    font-size: 22px;
+    line-height: 1.4;
+    color: var(--navy);
+    font-weight: 500;
+    margin-bottom: 18px;
+    font-style: italic;
+  }
+  
+  /* ===== prose ===== */
+  article p {
+    margin-bottom: 14px;
+    font-size: 15.5px;
+    line-height: 1.7;
+  }
+  article p:has(b:first-child),
+  article p strong:first-child {
+    color: var(--navy);
+  }
+  
+  .impl {
+    font-family: var(--serif-display);
+    font-style: italic;
+    font-size: 17px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    border-left: 2px solid var(--mustard);
+    padding: 12px 0 12px 20px;
+    margin: 18px 0 30px 0;
+  }
+  .impl::before {
+    content: "→ ";
+    color: var(--navy);
+    font-style: normal;
+    font-weight: 600;
+    margin-right: 4px;
+  }
+  
+  /* ===== tables — editorial style ===== */
+  .tbl-wrap {
+    margin: 24px 0;
+    overflow-x: auto;
+    border-top: 2px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+    font-family: var(--serif-body);
+    font-feature-settings: "tnum" 1;
+  }
+  thead th {
+    background: var(--paper-warm);
+    text-align: left;
+    padding: 12px 14px;
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--navy);
+    border-bottom: 1px solid var(--ink);
+    vertical-align: bottom;
+  }
+  tbody td {
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--rule-soft);
+    vertical-align: top;
+    line-height: 1.45;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: var(--paper-cream); }
+  td.right { text-align: right; font-variant-numeric: tabular-nums; font-family: var(--mono); font-size: 12.5px; }
+  td.center { text-align: center; }
+  td.metric-name { font-weight: 600; color: var(--ink); font-family: var(--serif-body); }
+  
+  /* directional flags */
+  .flag {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+  }
+  .flag.up    { color: var(--green); }
+  .flag.down  { color: var(--red); }
+  .flag.flat  { color: var(--mustard); }
+  .flag.new   { color: var(--red); font-weight: 700; }
+  
+  /* Chinese text mini-style */
+  .cn-term {
+    font-family: var(--serif-display);
+    color: var(--navy);
+    font-style: italic;
+  }
+  
+  /* ===== monitoring checklist ===== */
+  .checklist {
+    border-top: 2px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+  }
+  .checklist-row {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    border-bottom: 1px solid var(--rule);
+    padding: 18px 0;
+  }
+  .checklist-row:last-child { border-bottom: none; }
+  .checklist-row:hover { background: var(--paper-cream); }
+  .checklist-cat {
+    font-family: var(--serif-display);
+    font-size: 18px;
+    color: var(--navy);
+    font-weight: 600;
+    padding: 0 18px;
+    line-height: 1.3;
+  }
+  .checklist-cat small {
+    display: block;
+    font-family: var(--serif-body);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--mustard);
+    margin-bottom: 4px;
+    font-weight: 500;
+    font-style: normal;
+  }
+  .checklist-items {
+    padding: 0 18px;
+    font-size: 14.5px;
+    line-height: 1.6;
+  }
+  .checklist-items li {
+    list-style: none;
+    padding: 3px 0 3px 18px;
+    position: relative;
+  }
+  .checklist-items li::before {
+    content: "·";
+    position: absolute;
+    left: 0;
+    top: -4px;
+    color: var(--navy);
+    font-weight: 700;
+    font-size: 20px;
+  }
+  
+  /* ===== KPI mini-cards row in hero ===== */
+  .kpi-strip {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    margin: 36px 0 0 0;
+    border-top: 1px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+  }
+  @media (max-width: 720px) {
+    .kpi-strip { grid-template-columns: repeat(2, 1fr); }
+  }
+  .kpi-card {
+    padding: 16px 18px;
+    border-right: 1px solid var(--rule);
+  }
+  .kpi-card:last-child { border-right: none; }
+  @media (max-width: 720px) {
+    .kpi-card:nth-child(2) { border-right: none; }
+    .kpi-card:nth-child(1), .kpi-card:nth-child(2) { border-bottom: 1px solid var(--rule); }
+  }
+  .kpi-label {
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+  .kpi-value {
+    font-family: var(--serif-display);
+    font-size: 32px;
+    line-height: 1;
+    color: var(--ink);
+    font-weight: 500;
+    margin-bottom: 4px;
+    font-variant-numeric: tabular-nums;
+  }
+  .kpi-value.green { color: var(--green); }
+  .kpi-value.red { color: var(--red); }
+  .kpi-meta {
+    font-size: 11px;
+    color: var(--ink-soft);
+    font-family: var(--mono);
+    letter-spacing: 0.03em;
+  }
+  
+  /* ===== footer ===== */
+  footer {
+    margin: 80px 0 40px;
+    padding: 32px 0;
+    border-top: 1px solid var(--ink);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--ink-soft);
+    line-height: 1.7;
+    font-family: var(--serif-body);
+  }
+  footer .methodology {
+    font-style: italic;
+    font-family: var(--serif-display);
+    font-size: 14px;
+    letter-spacing: 0;
+    margin-bottom: 8px;
+    color: var(--ink-soft);
+  }
+  
+  /* ===== utility ===== */
+  .cn-block { font-family: var(--serif-display); color: var(--navy); font-style: italic; }
+  
+  /* ===== print ===== */
+  @media print {
+    body { background: white; font-size: 10pt; }
+    .toc { display: none; }
+    .layout { grid-template-columns: 1fr; }
+    article { max-width: 100%; }
+    section { page-break-inside: avoid; }
+    .exec-box { break-inside: avoid; }
+  }
+  
+  /* ===== entrance animation ===== */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .masthead, section { animation: fadeUp 0.7s ease-out backwards; }
+  section:nth-child(1) { animation-delay: 0.1s; }
+  section:nth-child(2) { animation-delay: 0.15s; }
+  section:nth-child(3) { animation-delay: 0.2s; }
+  section:nth-child(4) { animation-delay: 0.25s; }
+  
+  /* ===== thai-specific tweaks ===== */
+  body { word-break: break-word; }
+  /* Slightly tighter leading for Thai */
+  p, td, li { font-variant-east-asian: proportional-width; }
+</style>
+</head>
+<body>
+
+<header class="masthead wrap">
+  <div class="masthead-top">
+    <span>1492W Research <span class="dot">●</span> Investment Memo</span>
+    <div class="ticker-bar">
+      <span class="ticker"><strong>601828.SH</strong> · ¥2.39</span>
+      <span class="ticker"><strong>01528.HK</strong></span>
+      <span class="ticker">22 May 2026</span>
+    </div>
+  </div>
+  
+  <h1 class="hero-title">
+    <span class="cn">红星美凯龙 — Macalline Group</span>
+    The Quarter the<br>Engine Re-started
+  </h1>
+  
+  <p class="hero-dek">
+    หลังขาดทุน 4 ปีติด · Q1 2026 พลิกเป็นกำไรครั้งแรก · margin breakout
+    + operating cash flow บวก 4 ไตรมาสติด · แต่ NEW risk จาก ¥1.875B related-party loans เกินกำหนด
+  </p>
+  
+  <div class="hero-byline">
+    <span><strong>FILING</strong> Q1 2026 Report (27–28 Apr 2026)</span>
+    <span><strong>SHARES</strong> 4,354M</span>
+    <span><strong>MCAP</strong> ~¥10.4B</span>
+    <span><strong>OWNER</strong> 建发股份 23.95%</span>
+  </div>
+  
+  <div class="kpi-strip">
+    <div class="kpi-card">
+      <div class="kpi-label">Net Profit Q1</div>
+      <div class="kpi-value green">+¥47.7M</div>
+      <div class="kpi-meta">vs −¥513M Q1'25 · 扭亏为盈</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Gross Margin</div>
+      <div class="kpi-value green">66.31%</div>
+      <div class="kpi-meta">+7.25pp YoY · multi-yr high</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Operating CF</div>
+      <div class="kpi-value green">+¥413M</div>
+      <div class="kpi-meta">4Q consecutive positive</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Revenue YoY</div>
+      <div class="kpi-value red">−4.1%</div>
+      <div class="kpi-meta">decline ชะลอ vs −18% Q3'25</div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+<div class="layout">
+
+<!-- ===== TOC ===== -->
+<nav class="toc">
+  <div class="toc-label">In this memo</div>
+  <ol>
+    <li><a href="#sec-1">Executive Snapshot</a></li>
+    <li><a href="#sec-2">Thesis Impact</a></li>
+    <li><a href="#sec-3">KPI Dashboard</a></li>
+    <li><a href="#sec-4">Guidance Analysis</a></li>
+    <li><a href="#sec-5">Moat Evolution</a></li>
+    <li><a href="#sec-6">Major Risks</a></li>
+    <li><a href="#sec-7">Capital Allocation</a></li>
+    <li><a href="#sec-8">Monitoring Checklist</a></li>
+  </ol>
+</nav>
+
+<!-- ===== ARTICLE ===== -->
+<article>
+
+<!-- 1 -->
+<section id="sec-1">
+  <h2 class="section-h" data-num="01 / 08">Executive Snapshot</h2>
+  <p class="section-sub">Q1 2026 is the first quarter in years where the operating engine — not just non-cash adjustments — moved the needle</p>
+  
+  <div class="exec-box">
+    <p class="lead">Q1 2026 = thesis-changing quarter. บริษัทพลิกเป็นกำไร <b>+¥47.7M</b> (vs ขาดทุน −¥513M Q1 2025) — เป็นไตรมาสแรกที่กลับมามีกำไรหลังขาดทุนยาวนาน</p>
+    <p>Gross margin <b style="color:var(--green)">66.31%</b> (+7.25pp YoY, สูงสุดในรอบหลายปี) · operating cash flow <b style="color:var(--green)">+¥413M</b> บวกติดต่อกัน 4 ไตรมาส · ROE พลิกเป็น +0.21% (vs −1.12%)</p>
+    <p><b>ที่มาของการกลับด้าน:</b> ส่วนใหญ่มาจาก fair-value loss ของ investment property ที่ <b>ลดลงอย่างมีนัยสำคัญ</b> ในไตรมาสนี้ + cost cuts (−19/−19/−24% ในปี 2025) + financing cost rate ลงจาก 5.1% → 4.4% · ฝั่ง revenue ยังลด −4.1% YoY แต่ decline ชะลอชัดจาก −18% ใน Q3 2025</p>
+    <p><b>Thesis transition:</b> จาก "deep value with optionality" → <b>"operating turnaround in progress"</b></p>
+    <p style="margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--rule);"><b>ความเสี่ยงหลักที่ต้องดูต่อ:</b> (1) <b>¥1.875B</b> ของ related-party loans เกินกำหนด (ตั้งสำรองแค่ 55%) · (2) refinancing ¥5.7B current portion debt · (3) fair-value writedown รอบ 2 มิ.ย. 2026 · (4) บอร์ดเดินหน้าแผน <b>แยก heavy/light asset spin-off</b> — ถ้าทำได้คือ structural catalyst</p>
+  </div>
+</section>
+
+<!-- 2 -->
+<section id="sec-2">
+  <h2 class="section-h" data-num="02 / 08">Thesis Impact</h2>
+  <p class="section-sub">What materially changed in this quarter — direction, materiality, and how each shifts the investment case</p>
+  
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th style="width:34%">สิ่งที่เปลี่ยน</th>
+          <th style="width:18%">Direction · Materiality</th>
+          <th>Investor Implication</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="metric-name">Q1 2026 พลิกเป็นกำไร <span class="cn-term">(扭亏为盈)</span></td>
+          <td><span class="flag up">+✓ HIGH</span></td>
+          <td>ยืนยัน operating engine กำลังซ่อมตัว · ไม่ใช่แค่ paper turnaround</td>
+        </tr>
+        <tr>
+          <td class="metric-name">Fair-value loss Q1 หดตัวมาก</td>
+          <td><span class="flag up">+✓ HIGH</span></td>
+          <td>อาจใกล้จุดต่ำสุดของรอบ writedown · แต่ยังต้องดู H1 review (มิ.ย.)</td>
+        </tr>
+        <tr>
+          <td class="metric-name">Gross margin 66.31% (+7.25pp YoY)</td>
+          <td><span class="flag up">+✓ HIGH</span></td>
+          <td>Pricing power กลับ + mix shift มาทาง electronics/auto margin สูง</td>
+        </tr>
+        <tr>
+          <td class="metric-name">Revenue decline ชะลอ (−4.1% vs −18% Q3'25)</td>
+          <td><span class="flag flat">~ MED</span></td>
+          <td>Self-op malls หด 74→72; ยังไม่ใช่ growth</td>
+        </tr>
+        <tr>
+          <td class="metric-name">แผนแยก <span class="cn-term">重资产/轻资产</span> spin-off</td>
+          <td><span class="flag up">+✓ HIGH</span></td>
+          <td>Structural catalyst · ปลด conglomerate discount · 6–12 เดือนข้างหน้า</td>
+        </tr>
+        <tr>
+          <td class="metric-name"><span class="cn-term">财务资助</span> ¥1.875B เกินกำหนด (new disclosure)</td>
+          <td><span class="flag down">−✗ MED</span></td>
+          <td>Uncovered ~¥840M · อาจเป็น next leg of impairment</td>
+        </tr>
+        <tr>
+          <td class="metric-name">Founder governance crisis ปิด</td>
+          <td><span class="flag up">+✓ HIGH</span></td>
+          <td>Sep 2025 ปลดมาตรการกักตัว · <span class="cn-term">建发</span> ทีมคุมเต็มตัว</td>
+        </tr>
+        <tr>
+          <td class="metric-name"><span class="cn-term">建发</span> synergy เห็นผลในตัวเลข</td>
+          <td><span class="flag up">+✓ MED</span></td>
+          <td>Auto +100% YoY area · electronics 10.1% · financing −70bp</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
+  <p class="impl">Q1 ไม่ได้แค่เป็น "ดีกว่าเดิม" — มันเป็น regime change ของ thesis: operating engine ตัวจริง (margin + cash flow) ฟื้นพร้อมกับการลดลงของ non-cash drag</p>
+</section>
+
+<!-- 3 -->
+<section id="sec-3">
+  <h2 class="section-h" data-num="03 / 08">KPI Dashboard</h2>
+  <p class="section-sub">ตัวชี้วัดเทียบไตรมาสและทั้งปี — ฝั่ง profitability ฟื้น, ฝั่ง revenue ยัง rightsize</p>
+  
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Metric</th>
+          <th class="right">Q1 2026</th>
+          <th class="right">Q1 2025</th>
+          <th class="right">FY2025</th>
+          <th class="center">YoY</th>
+          <th>Trend</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="metric-name">Revenue</td><td class="right">¥1.55B</td><td class="right">¥1.62B</td><td class="right">¥6.58B</td><td class="center"><span class="flag down">YoY↓</span></td><td>Decline ชะลอ</td></tr>
+        <tr><td class="metric-name">Net profit (parent)</td><td class="right">+¥47.7M</td><td class="right">−¥513M</td><td class="right">−¥23.7B</td><td class="center"><span class="flag up">YoY↑</span></td><td><span class="cn-term">扭亏为盈</span></td></tr>
+        <tr><td class="metric-name">Gross margin</td><td class="right">66.31%</td><td class="right">59.06%</td><td class="right">61.9%</td><td class="center"><span class="flag up">YoY↑</span></td><td>หลายปีสูงสุด</td></tr>
+        <tr><td class="metric-name">Operating CF</td><td class="right">+¥413M</td><td class="right">−¥112M</td><td class="right">+¥816M</td><td class="center"><span class="flag up">YoY↑</span></td><td>+ve 4 Q ติด</td></tr>
+        <tr><td class="metric-name">Self-op malls (#)</td><td class="right">72</td><td class="right">76</td><td class="right">74</td><td class="center"><span class="flag down">YoY↓</span></td><td>Right-sizing</td></tr>
+        <tr><td class="metric-name">Managed malls (#)</td><td class="right">218</td><td class="right">235</td><td class="right">218</td><td class="center"><span class="flag down">YoY↓</span></td><td>ตัดของเสียทิ้ง</td></tr>
+        <tr><td class="metric-name">Self-op occupancy</td><td class="right">n/d</td><td class="right">~83%</td><td class="right">85.0%</td><td class="center"><span class="flag up">YoY↑</span></td><td>ฟื้นตัว</td></tr>
+        <tr><td class="metric-name">Inventory turnover (x)</td><td class="right">19.5</td><td class="right">13.3</td><td class="right">n/d</td><td class="center"><span class="flag up">YoY↑</span></td><td>+46.6% YoY</td></tr>
+        <tr><td class="metric-name">ROE</td><td class="right">+0.21%</td><td class="right">−1.12%</td><td class="right">−40.79%</td><td class="center"><span class="flag up">YoY↑</span></td><td>พลิกเป็นบวก</td></tr>
+        <tr><td class="metric-name">Asset/liab ratio</td><td class="right">72.62%</td><td class="right">n/d</td><td class="right">n/d</td><td class="center"><span class="flag flat">—</span></td><td>สูงแต่ stable</td></tr>
+        <tr><td class="metric-name">EPS (¥)</td><td class="right">+0.01</td><td class="right">−0.12</td><td class="right">−5.45</td><td class="center"><span class="flag up">YoY↑</span></td><td>Turnaround</td></tr>
+        <tr><td class="metric-name">Total assets</td><td class="right">¥87.43B</td><td class="right">n/d</td><td class="right">¥87.43B</td><td class="center"><span class="flag flat">—</span></td><td>Stable</td></tr>
+      </tbody>
+    </table>
+  </div>
+  
+  <p class="impl">KPI cluster แบ่งเป็น 2 กลุ่ม — ฝั่ง profitability/margin/cash flow ฟื้นชัด (Green) · ฝั่ง revenue/store count ยังหดตัวจากการ rightsizing (Red but improving)</p>
+</section>
+
+<!-- 4 -->
+<section id="sec-4">
+  <h2 class="section-h" data-num="04 / 08">Guidance Analysis</h2>
+  <p class="section-sub">บริษัทไม่ให้ quantitative guidance — ใช้ sell-side estimates เป็น proxy สำหรับ market expectations</p>
+  
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Broker</th>
+          <th class="right">2026 Revenue</th>
+          <th>2026 NP / EPS</th>
+          <th>Rating / PT</th>
+          <th>Q1 read</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="metric-name"><span class="cn-term">华西证券</span></td>
+          <td class="right">¥8.04B</td>
+          <td>¥0.04/share EPS</td>
+          <td>Hold <span class="cn-term">(增持)</span></td>
+          <td>Q1 EPS ¥0.01 = on track for ¥0.04</td>
+        </tr>
+        <tr>
+          <td class="metric-name"><span class="cn-term">国投证券</span></td>
+          <td class="right">¥8.60B</td>
+          <td>¥249M NP</td>
+          <td>Buy-A · <b>¥3.35 PT</b> (58.5× 26P)</td>
+          <td>Implied 40%+ upside from ¥2.39</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
+  <p><b style="color:var(--navy)">Accounting clarification:</b> Net loss FY2025 −¥23.7B <b>~98% เป็น non-cash fair-value writedown</b> ของ investment property · operating ของ commercial services segment ทำกำไรอยู่ตลอด · ดูจาก operating CF บวก 4 ไตรมาสติดเป็นหลัก</p>
+  
+  <p class="impl">Underlying economic performance: ฟื้นชัด · Q1 EPS ¥0.01 อยู่ใน track ของ broker estimates · กำลังจะเป็นปีแรกในรอบ 5 ปีที่อาจมีกำไร operating ปกติ</p>
+</section>
+
+<!-- 5 -->
+<section id="sec-5">
+  <h2 class="section-h" data-num="05 / 08">Strategic / Moat Evolution</h2>
+  <p class="section-sub">โครงสร้างการแข่งขันและ competitive position ใน 6 มิติ</p>
+  
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Dimension</th>
+          <th>Condition</th>
+          <th class="center">Dir.</th>
+          <th>Key observation</th>
+          <th>Implication</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="metric-name">Pricing power</td><td>Recovering</td><td class="center"><span class="flag up">+✓</span></td><td>Rental <span class="cn-term">"止跌企稳"</span> ใน Q1 + gross margin +7.25pp</td><td>ใกล้ bottom ของ cycle pricing</td></tr>
+        <tr><td class="metric-name">Competitive position</td><td>Stable #1</td><td class="center"><span class="flag flat">~</span></td><td>292 malls vs Easyhome ~400 stores; share ไม่เสีย</td><td>ไม่ใช่ growth driver แต่ moat อยู่</td></tr>
+        <tr><td class="metric-name">Operating leverage</td><td>พลิกเป็นบวก</td><td class="center"><span class="flag up">+✓</span></td><td>Cost cuts −19/−19/−24% > revenue decline −4% = margin gap ขยาย</td><td>Margin expansion runway</td></tr>
+        <tr><td class="metric-name">Capital intensity</td><td>ลดลง</td><td class="center"><span class="flag up">+✓</span></td><td>แผน spin off heavy/light asset · payables −43.79% YoY</td><td>Structural ลดความเสี่ยง</td></tr>
+        <tr><td class="metric-name">Ecosystem moat</td><td>ขยาย</td><td class="center"><span class="flag up">+✓</span></td><td>3+Star, Mega-E, M+, NEV 3100, Silver mall · 4 new growth curves</td><td>ถ้าทำสำเร็จ = different company</td></tr>
+        <tr><td class="metric-name">Cost of capital</td><td>ลด 70bp</td><td class="center"><span class="flag up">+✓</span></td><td>SOE-backed funding · interest −15% YoY · ¥371M saved</td><td>Permanent benefit จาก <span class="cn-term">建发</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  
+  <p><b style="color:var(--navy)">5–10 year horizon:</b> แผนยุทธศาสตร์ 5 ปีใหม่ (Dec 2025) ตั้ง positioning เป็น <span class="cn-block">"家居生活新商业运营商与家居产业生态服务商"</span> — เคลื่อนจาก real-estate-as-a-service ไปเป็น operator + platform 4 ขา: heavy-asset, light-asset, supply chain (B-end), ecosystem · ถ้า supply chain B2B + overseas pilot ทำได้จริง = different company</p>
+</section>
+
+<!-- 6 -->
+<section id="sec-6">
+  <h2 class="section-h" data-num="06 / 08">Major Risks & Changes</h2>
+  <p class="section-sub">Risk profile ในไตรมาสนี้ — มี new disclosure ที่สำคัญ</p>
+  
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Risk</th>
+          <th>Prior</th>
+          <th>Current</th>
+          <th class="center">Δ</th>
+          <th>Implication</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="metric-name">Fair value writedown รอบ 2</td><td>High</td><td>High</td><td class="center"><span class="flag flat">~</span></td><td>NAV ถูกบีบรอบใหม่ถ้าอสังหาฯ จีนยังดิ่ง · ดู H1 review มิ.ย. 26</td></tr>
+        <tr><td class="metric-name">Refinancing ¥5.7B current portion</td><td>High</td><td>High</td><td class="center"><span class="flag flat">~</span></td><td>ดอกเบี้ยที่ rollover ได้ = key margin variable</td></tr>
+        <tr><td class="metric-name"><span class="cn-term">财务资助</span> ¥1.875B เกินกำหนด</td><td>Undisclosed</td><td>Disclosed</td><td class="center"><span class="flag new">NEW</span></td><td>Uncovered ~¥840M · อาจมี impairment เพิ่ม</td></tr>
+        <tr><td class="metric-name"><span class="cn-term">红星控股</span> force sell 18.94%</td><td>Medium</td><td>Medium</td><td class="center"><span class="flag flat">~</span></td><td>Bankruptcy proceedings ดำเนิน · overhang ใหญ่</td></tr>
+        <tr><td class="metric-name">Founder / governance</td><td>Acute</td><td>Closed</td><td class="center"><span class="flag up">+✓</span></td><td>Detention release 22 Sep 25 + ทีมใหม่ลงตัว</td></tr>
+        <tr><td class="metric-name">Same-store revenue</td><td>Declining hard</td><td>Stabilizing</td><td class="center"><span class="flag up">+✓</span></td><td>−4.1% Q1 vs −18% Q3 25 · ใกล้ floor</td></tr>
+        <tr><td class="metric-name">Real estate cycle</td><td>Decline</td><td>Mgmt: <span class="cn-term">止跌企稳</span></td><td class="center"><span class="flag up">+ (?)</span></td><td>ต้องรอ confirmation · macro China property ยังไม่ดี</td></tr>
+      </tbody>
+    </table>
+  </div>
+  
+  <p class="impl">Risk profile กำลังเปลี่ยน — governance risk ปิดแล้ว, fundamental risk ลด แต่มี NEW risk จาก ¥1.875B financial assistance ที่เพิ่งเปิดเผยชัดเจน · balance sheet risk ยังเป็น dominant concern</p>
+</section>
+
+<!-- 7 -->
+<section id="sec-7">
+  <h2 class="section-h" data-num="07 / 08">Capital Allocation & Per-Share Impact</h2>
+  <p class="section-sub">Operating cash flow per share + capital priorities สำหรับ 2026</p>
+  
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Period</th>
+          <th class="right">Operating CF</th>
+          <th class="right">Shares (M)</th>
+          <th class="right">OCF / share</th>
+          <th class="right">YoY change</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="metric-name">FY2024</td><td class="right">¥216M</td><td class="right">4,354</td><td class="right"><b>¥0.050</b></td><td class="right">—</td></tr>
+        <tr><td class="metric-name">FY2025</td><td class="right">¥816M</td><td class="right">4,354</td><td class="right"><b>¥0.187</b></td><td class="right" style="color:var(--green)">+277%</td></tr>
+        <tr><td class="metric-name">Q1 2026 (annualized)</td><td class="right">¥1,652M</td><td class="right">4,354</td><td class="right"><b>¥0.379</b></td><td class="right" style="color:var(--green)">+102%</td></tr>
+      </tbody>
+    </table>
+  </div>
+  
+  <p><b style="color:var(--navy)">Buybacks vs dilution:</b> ไม่มี buyback program · <b>ไม่จ่ายปันผลปี 2025</b> (parent มี accumulated losses ทำให้แจกไม่ได้ตามกฎหมายจีน) · <b>ไม่มี dilution ใหม่</b></p>
+  
+  <p><b style="color:var(--navy)">Capital priorities (board มี.ค. 2026):</b> (1) ทำ balance sheet ให้สะอาด · (2) ลงทุนใน supply chain B2B + overseas · (3) แยก heavy/light asset · (4) ประกาศ valuation enhancement plan</p>
+  
+  <p class="impl">FCF/share ฟื้นชัดจาก ¥0.05 (24) → ¥0.19 (25) → ¥0.38 annualized (Q1 26) แต่ฐานยังต่ำ · ต้องดู +ve ติดอีก 3 ไตรมาสก่อนจะบอกว่า compounding กลับมา · ปันผลยังจ่ายไม่ได้จนกว่า parent losses จะ clear</p>
+</section>
+
+<!-- 8 -->
+<section id="sec-8">
+  <h2 class="section-h" data-num="08 / 08">Monitoring Checklist</h2>
+  <p class="section-sub">สิ่งที่ต้องเฝ้าดูเพื่อ confirm หรือ reassess thesis</p>
+  
+  <div class="checklist">
+    <div class="checklist-row">
+      <div class="checklist-cat"><small>Track</small>5 Signals to Track</div>
+      <ul class="checklist-items">
+        <li>Q2 2026 net profit ยังบวกอยู่ไหม (อย่างใช่ one-quarter blip)</li>
+        <li>H1 2026 mid-year fair-value review (ปิด 30 มิ.ย. 26)</li>
+        <li>Refinancing terms ของ ¥5.7B current portion debt</li>
+        <li><span class="cn-term">红星控股</span> bankruptcy court ruling — force sell 18.94% หุ้น?</li>
+        <li>Overseas pilot mall แห่งแรก: ทำเล + partner + model</li>
+      </ul>
+    </div>
+    <div class="checklist-row">
+      <div class="checklist-cat"><small>Building</small>Key Risks Building</div>
+      <ul class="checklist-items">
+        <li>¥840M uncovered exposure ของ overdue <span class="cn-term">财务资助</span></li>
+        <li>Long-term debt rollover ที่อัตราดอกเบี้ยอาจสูงขึ้นหาก rating ลด</li>
+        <li>China property cycle ลงต่อ → fair value round 2</li>
+      </ul>
+    </div>
+    <div class="checklist-row">
+      <div class="checklist-cat"><small>Confirm</small>Confirmation Signals</div>
+      <ul class="checklist-items">
+        <li>Q2 gross margin sustained > 65%</li>
+        <li>Q2 operating CF ≥ ¥300M (Q1 = ¥413M)</li>
+        <li>ประกาศ heavy/light asset spin-off framework</li>
+        <li><span class="cn-term">建发</span> inject สินทรัพย์เพิ่มเข้าบริษัท (Auto/Electronics)</li>
+        <li>Sell-side ปรับ revenue estimate กลับมาโตเป็นบวก</li>
+      </ul>
+    </div>
+    <div class="checklist-row">
+      <div class="checklist-cat"><small>Reassess</small>Conviction Tripwires</div>
+      <ul class="checklist-items">
+        <li>Fair-value writedown รอบ 2 > ¥10B</li>
+        <li>Refinancing fails OR done at > 6% rate</li>
+        <li><span class="cn-term">红星控股</span> ถูกศาลสั่งขายหุ้นที่ราคา discount > 20%</li>
+        <li>Founder Che กลับมา operating role (= <span class="cn-term">建发</span> thesis fail)</li>
+        <li>Q2 พลิกกลับมาขาดทุน operating (ไม่นับ fair-value)</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="methodology">Methodology — web-retrieved primary sources <span class="cn-term">(公司公告, 上交所)</span>, sina finance, IR transcripts</div>
+  <div>No knowledge base attached · historical comparison limited to 5 quarters · prepared without sell-side report access · next refresh: Q2 2026 report (expected end Aug 2026)</div>
+  <div style="margin-top: 14px;">1492W RESEARCH · For internal use only · 22 May 2026</div>
+</footer>
+
+</article>
+</div>
+</div>
+
+</body>
+</html>
