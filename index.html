@@ -24,11 +24,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .dash-header h1{font-size:28px;font-weight:800;color:#fff}
 .dash-header p{color:rgba(255,255,255,0.6);font-size:14px;margin-top:6px}
 .dash-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px}
-.dash-card{background:#fff;border-radius:14px;padding:28px;text-decoration:none;color:#1A1A1A;box-shadow:0 4px 20px rgba(0,0,0,0.1);transition:transform .2s,box-shadow .2s;position:relative;overflow:hidden}
+.dash-card{background:#fff;border-radius:14px;padding:28px;text-decoration:none;color:#1A1A1A;box-shadow:0 4px 20px rgba(0,0,0,0.1);transition:transform .2s,box-shadow .2s;position:relative;overflow:hidden;display:flex;flex-direction:column}
 .dash-card:hover{transform:translateY(-4px);box-shadow:0 8px 32px rgba(0,0,0,0.15)}
 .dash-card .emoji{font-size:36px;margin-bottom:12px}
 .dash-card h3{font-size:16px;font-weight:700;color:#1B3A5C;margin-bottom:4px}
 .dash-card .desc{font-size:13px;color:#5A6B7E;line-height:1.5}
+.dash-card .date{margin-top:auto;padding-top:14px;font-size:11px;font-weight:600;letter-spacing:.4px;color:#90A0B0;display:flex;align-items:center;gap:5px}
+.dash-card .date::before{content:'';width:5px;height:5px;border-radius:50%;background:#C3CDD8}
 .dash-card .badge{position:absolute;top:16px;right:16px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;padding:3px 8px;border-radius:4px}
 .badge.earnings{background:#E8F5E9;color:#2E7D32}
 .badge.analysis{background:#E3F2FD;color:#1565C0}
@@ -60,59 +62,68 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
     <p>Select a company to view its latest analysis</p>
   </div>
   <div class="dash-grid">
-    <a class="dash-card" href="xiaomi/index.html">
-      <div class="emoji">📱</div>
-      <span class="badge earnings">Earnings</span>
-      <h3>Xiaomi (1810.HK)</h3>
-      <div class="desc">Q4 FY2025 Earnings Dashboard — Revenue, EV, IoT, AI strategy analysis with interactive charts</div>
-    </a>
-    <a class="dash-card" href="weibo/index.html">
-      <div class="emoji">🌐</div>
-      <span class="badge earnings">Earnings</span>
-      <h3>Weibo (WB)</h3>
-      <div class="desc">Q4 FY2025 Earnings Update — User metrics, monetization, competitive positioning</div>
-    </a>
-    <a class="dash-card" href="soyoung/index.html">
-      <div class="emoji">💉</div>
-      <span class="badge analysis">Analysis</span>
-      <h3>So Young (SY)</h3>
-      <div class="desc">Center Phase Analysis — Business model evolution, market dynamics, thesis assessment</div>
-    </a>
-    <a class="dash-card" href="bafs/index.html">
-      <div class="emoji">✈️</div>
-      <span class="badge evolution">Evolution</span>
-      <h3>BAFS (BAFS.BK)</h3>
-      <div class="desc">Business & Reporting Evolution — Segment structure, accounting changes, moat analysis</div>
-    </a>
-    <a class="dash-card" href="chagee/index.html">
-      <div class="emoji">🍵</div>
-      <span class="badge analysis">Analysis</span>
-      <h3>CHAGEE (CHA)</h3>
-      <div class="desc">US Monthly Snapshot — Store expansion, app traction, review signals, delivery proxy data</div>
-    </a>
-    <a class="dash-card" href="rsm/index.html">
-      <div class="emoji">🛋️</div>
-      <span class="badge analysis">Analysis</span>
-      <h3>红星美凯龙 (601828.SH)</h3>
-      <div class="desc">Turnaround Thesis — FY2025 + Q1 2026, governance reset, 建发 synergy, 5-year plan, risks</div>
-    </a>
-    <a class="dash-card" href="rsm/q1-2026-earnings-update.html">
+    <a class="dash-card" href="rsm/q1-2026-earnings-update.html" data-date="2026-05-26">
       <div class="emoji">📊</div>
       <span class="badge earnings">Earnings</span>
       <h3>红星美凯龙 — Q1 2026</h3>
       <div class="desc">Q1 2026 Earnings Dashboard — Turnaround quarter (扭亏为盈), margin breakout, narrative changes, capital plan, REIT spin-off pathway, new commercial model (套餐化/场景化/百货化, 30+10+1), risks</div>
+      <div class="date">Updated 26 May 2026</div>
     </a>
-    <a class="dash-card" href="chagee/delivery-war.html">
-      <div class="emoji">🛵</div>
+    <a class="dash-card" href="rsm/index.html" data-date="2026-05-21">
+      <div class="emoji">🛋️</div>
       <span class="badge analysis">Analysis</span>
-      <h3>CHAGEE — Delivery War</h3>
-      <div class="desc">สงครามเงินอุดหนุน Delivery และผลกระทบต่อ Chagee — subsidy economics, margin impact</div>
+      <h3>红星美凯龙 (601828.SH)</h3>
+      <div class="desc">Turnaround Thesis — FY2025 + Q1 2026, governance reset, 建发 synergy, 5-year plan, risks</div>
+      <div class="date">Updated 21 May 2026</div>
     </a>
-    <a class="dash-card" href="chagee/earnings-q4.html">
+    <a class="dash-card" href="chagee/earnings-q4.html" data-date="2026-04-02">
       <div class="emoji">📊</div>
       <span class="badge earnings">Earnings</span>
       <h3>CHAGEE — Q4 FY2025</h3>
       <div class="desc">Q4 FY2025 Earnings Update — Revenue, store growth, margins, thesis assessment</div>
+      <div class="date">Updated 2 Apr 2026</div>
+    </a>
+    <a class="dash-card" href="chagee/delivery-war.html" data-date="2026-04-02">
+      <div class="emoji">🛵</div>
+      <span class="badge analysis">Analysis</span>
+      <h3>CHAGEE — Delivery War</h3>
+      <div class="desc">สงครามเงินอุดหนุน Delivery และผลกระทบต่อ Chagee — subsidy economics, margin impact</div>
+      <div class="date">Updated 2 Apr 2026</div>
+    </a>
+    <a class="dash-card" href="chagee/index.html" data-date="2026-03-29">
+      <div class="emoji">🍵</div>
+      <span class="badge analysis">Analysis</span>
+      <h3>CHAGEE (CHA)</h3>
+      <div class="desc">US Monthly Snapshot — Store expansion, app traction, review signals, delivery proxy data</div>
+      <div class="date">Updated 29 Mar 2026</div>
+    </a>
+    <a class="dash-card" href="xiaomi/index.html" data-date="2026-03-27">
+      <div class="emoji">📱</div>
+      <span class="badge earnings">Earnings</span>
+      <h3>Xiaomi (1810.HK)</h3>
+      <div class="desc">Q4 FY2025 Earnings Dashboard — Revenue, EV, IoT, AI strategy analysis with interactive charts</div>
+      <div class="date">Updated 27 Mar 2026</div>
+    </a>
+    <a class="dash-card" href="weibo/index.html" data-date="2026-03-27">
+      <div class="emoji">🌐</div>
+      <span class="badge earnings">Earnings</span>
+      <h3>Weibo (WB)</h3>
+      <div class="desc">Q4 FY2025 Earnings Update — User metrics, monetization, competitive positioning</div>
+      <div class="date">Updated 27 Mar 2026</div>
+    </a>
+    <a class="dash-card" href="soyoung/index.html" data-date="2026-03-27">
+      <div class="emoji">💉</div>
+      <span class="badge analysis">Analysis</span>
+      <h3>So Young (SY)</h3>
+      <div class="desc">Center Phase Analysis — Business model evolution, market dynamics, thesis assessment</div>
+      <div class="date">Updated 27 Mar 2026</div>
+    </a>
+    <a class="dash-card" href="bafs/index.html" data-date="2026-03-27">
+      <div class="emoji">✈️</div>
+      <span class="badge evolution">Evolution</span>
+      <h3>BAFS (BAFS.BK)</h3>
+      <div class="desc">Business & Reporting Evolution — Segment structure, accounting changes, moat analysis</div>
+      <div class="date">Updated 27 Mar 2026</div>
     </a>
   </div>
   <a class="logout-btn" id="logoutBtn">Sign out</a>
@@ -161,6 +172,13 @@ document.getElementById('logoutBtn').addEventListener('click', function() {
 function showDashboards() {
   document.getElementById('loginBox').style.display = 'none';
   document.getElementById('dashIndex').style.display = 'block';
+  // Sort cards newest-first by data-date (so future cards auto-order regardless of source position)
+  const grid = document.querySelector('.dash-grid');
+  if (grid) {
+    Array.from(grid.querySelectorAll('.dash-card'))
+      .sort((a, b) => (b.dataset.date || '').localeCompare(a.dataset.date || ''))
+      .forEach(card => grid.appendChild(card));
+  }
 }
 </script>
 </body>
